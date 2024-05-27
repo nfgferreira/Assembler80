@@ -13,13 +13,13 @@
 /* definicao de caracteres validos para simbolos (fora letras e algarismos) */
 #define isvalid(c) ((c) == '?' || (c) == '_' || (c) == '#')
 
-char *falha_de_abertura = "NAO CONSEGUIU ABRIR ARQUIVO %s\n";
+char *falha_de_abertura = "FAILED TO OPEN FILE %s\n";
 
 /******************* tabela de palavras reservadas **************************/
 
 static preservada resa [] =
 	{
-	"A",			A,				i8080 | i8085 | z80 | z180,
+	"A",		A,				i8080 | i8085 | z80 | z180,
 	"ACI",		ACI,			i8080 | i8085 | z80 | z180,
 	"ADC",		ADC,			i8080 | i8085 | z80 | z180,
 	"ADD",		ADD,			i8080 | i8085 | z80 | z180,
@@ -32,17 +32,17 @@ static preservada resa [] =
 
 static preservada resb [] =
 	{
-	"B",			B,				i8080 | i8085 | z80 | z180,
+	"B",		B,				i8080 | i8085 | z80 | z180,
 	"BIT",		BIT,			z80 | z180,
 	"BSET",		BSET,			z80 | z180
 	};
 
 static preservada resc [] =
 	{
-	"C",			C,				i8080 | i8085 | z80 | z180,
+	"C",		C,			 	i8080 | i8085 | z80 | z180,
 	"CALL",		CALL,			i8080 | i8085 | z80 | z180,
-	"CC",			CC,			i8080 | i8085 | z80 | z180,
-	"CM",			CM,			i8080 | i8085 | z80 | z180,
+	"CC",		CC,				i8080 | i8085 | z80 | z180,
+	"CM",		CM,				i8080 | i8085 | z80 | z180,
 	"CMA",		CMA,			i8080 | i8085 | z80 | z180,
 	"CMC",		CMC,			i8080 | i8085 | z80 | z180,
 	"CMD",		CMD,			z80 | z180,
@@ -53,46 +53,46 @@ static preservada resc [] =
 	"CNC",		CNC,			i8080 | i8085 | z80 | z180,
 	"CNV",		CPO,			z80 | z180,
 	"CNZ",		CNZ,			i8080 | i8085 | z80 | z180,
-	"CP",			CP,			i8080 | i8085 | z80 | z180,
+	"CP",		CP,				i8080 | i8085 | z80 | z180,
 	"CPE",		CPE,			i8080 | i8085 | z80 | z180,
 	"CPI",		CPI,			i8080 | i8085 | z80 | z180,
 	"CPO",		CPO,			i8080 | i8085 | z80 | z180,
 	"CSEG",		CSEG,			i8080 | i8085 | z80 | z180,
-	"CV",			CPE,			z80 | z180,
-	"CZ",			CZ,			i8080 | i8085 | z80 | z180
+	"CV",		CPE,			z80 | z180,
+	"CZ",		CZ,				i8080 | i8085 | z80 | z180
 	};
 
 static preservada resd [] =
 	{
-	"D",			D,				i8080 | i8085 | z80 | z180,
+	"D",		D,				i8080 | i8085 | z80 | z180,
 	"DAA",		DAA,			i8080 | i8085 | z80 | z180,
 	"DAD",		DAD,			i8080 | i8085 | z80 | z180,
 	"DADC",		DADC,			z80 | z180,
 	"DADX",		DADX,			z80 | z180,
 	"DADY",		DADY,			z80 | z180,
-	"DB",			DB,			i8080 | i8085 | z80 | z180,
+	"DB",		DB,				i8080 | i8085 | z80 | z180,
 	"DCR",		DCR,			i8080 | i8085 | z80 | z180,
 	"DCX",		DCX,			i8080 | i8085 | z80 | z180,
-	"DI",			DI,			i8080 | i8085 | z80 | z180,
+	"DI",		DI,				i8080 | i8085 | z80 | z180,
 	"DJNZ",		DJNZ,			z80 | z180,
-	"DS",			DS,			i8080 | i8085 | z80 | z180,
+	"DS",		DS,				i8080 | i8085 | z80 | z180,
 	"DSBB",		DSBB,			z80 | z180,
 	"DSEG",		DSEG,			i8080 | i8085 | z80 | z180,
-	"DW",			DW,			i8080 | i8085 | z80 | z180
+	"DW",		DW,				i8080 | i8085 | z80 | z180
 	};
 
 static preservada rese [] =
 	{
-	"E",			E,				i8080 | i8085 | z80 | z180,
-	"EI",			EI,			i8080 | i8085 | z80 | z180,
+	"E",		E,				i8080 | i8085 | z80 | z180,
+	"EI",		EI,				i8080 | i8085 | z80 | z180,
 	"ELSE",		ELSE,			i8080 | i8085 | z80 | z180,
 	"END",		END,			i8080 | i8085 | z80 | z180,
-	"ENDIF",		ENDIF,		i8080 | i8085 | z80 | z180,
+	"ENDIF",	ENDIF,			i8080 | i8085 | z80 | z180,
 	"ENDM",		ENDM,			i8080 | i8085 | z80 | z180,
-	"EQ",			EQ,			i8080 | i8085 | z80 | z180,
+	"EQ",		EQ,			 	i8080 | i8085 | z80 | z180,
 	"EQU",		EQU,			i8080 | i8085 | z80 | z180,
-	"EXITM",		EXITM,		i8080 | i8085 | z80 | z180,
-	"EXTRN",		EXTRN,		i8080 | i8085 | z80 | z180
+	"EXITM",	EXITM,			i8080 | i8085 | z80 | z180,
+	"EXTRN",	EXTRN,			i8080 | i8085 | z80 | z180
 	};
 
 static preservada resg [] =
@@ -103,19 +103,19 @@ static preservada resg [] =
 
 static preservada resh [] =
 	{
-	"H",			H,				i8080 | i8085 | z80 | z180,
+	"H",		H,				i8080 | i8085 | z80 | z180,
 	"HIGH",		HIGH,			i8080 | i8085 | z80 | z180,
 	"HLT",		HLT,			i8080 | i8085 | z80 | z180
 	};
 
 static preservada resi [] =
 	{
-	"I",			I,				z80 | z180,
-	"IF",			IF,			i8080 | i8085 | z80 | z180,
-	"IFDEF",		IFDEF,		i8080 | i8085 | z80 | z180,
-	"IFNDEF",	IFNDEF,		i8080 | i8085 | z80 | z180,
-	"IM",			IM,			z80 | z180,
-	"IN",			IN,			i8080 | i8085 | z80 | z180,
+	"I",		I,				z80 | z180,
+	"IF",		IF,				i8080 | i8085 | z80 | z180,
+	"IFDEF",	IFDEF,			i8080 | i8085 | z80 | z180,
+	"IFNDEF",	IFNDEF,			i8080 | i8085 | z80 | z180,
+	"IM",		IM,				z80 | z180,
+	"IN",		IN,				i8080 | i8085 | z80 | z180,
 	"IN0",		IN0,			z180,
 	"INC",		INC,			z80 | z180,
 	"IND",		IND,			z80 | z180,
@@ -125,33 +125,33 @@ static preservada resi [] =
 	"INR",		INR,			i8080 | i8085 | z80 | z180,
 	"INX",		INX,			i8080 | i8085 | z80 | z180,
 	"IRP",		IRP,			i8080 | i8085 | z80 | z180,
-	"IX",			IX,			z80 | z180,
-	"IY",			IY,			z80 | z180
+	"IX",		IX,				z80 | z180,
+	"IY",		IY,				z80 | z180
 	};
 
 static preservada resj [] =
 	{
-	"JC",			JC,			i8080 | i8085 | z80 | z180,
+	"JC",		JC,				i8080 | i8085 | z80 | z180,
 	"JCR",		JCR,			z80 | z180,
-	"JM",			JM,			i8080 | i8085 | z80 | z180,
+	"JM",		JM,				i8080 | i8085 | z80 | z180,
 	"JMP",		JMP,			i8080 | i8085 | z80 | z180,
 	"JNC",		JNC,			i8080 | i8085 | z80 | z180,
 	"JNCR",		JNCR,			z80 | z180,
 	"JNV",		JPO,			z80 | z180,
 	"JNZ",		JNZ,			i8080 | i8085 | z80 | z180,
 	"JNZR",		JNZR,			z80 | z180,
-	"JP",			JP,			i8080 | i8085 | z80 | z180,
+	"JP",		JP,				i8080 | i8085 | z80 | z180,
 	"JPE",		JPE,			i8080 | i8085 | z80 | z180,
 	"JPO",		JPO,			i8080 | i8085 | z80 | z180,
-	"JR",			JR,			z80 | z180,
-	"JV",			JPE,			z80 | z180,
-	"JZ",			JZ,			i8080 | i8085 | z80 | z180,
+	"JR",		JR,				z80 | z180,
+	"JV",		JPE,			z80 | z180,
+	"JZ",		JZ,				i8080 | i8085 | z80 | z180,
 	"JZR",		JZR,			z80 | z180
 	};
 
 static preservada resl [] =
 	{
-	"L",			L,				i8080 | i8085 | z80 | z180,
+	"L",		L,				i8080 | i8085 | z80 | z180,
 	"LBCD",		LBCD,			z80 | z180,
 	"LDA",		LDA,			i8080 | i8085 | z80 | z180,
 	"LDAX",		LDAX,			i8080 | i8085 | z80 | z180,
@@ -160,22 +160,22 @@ static preservada resl [] =
 	"LDED",		LDED,			z80 | z180,
 	"LDI",		LDI,			z80 | z180,
 	"LDIR",		LDIR,			z80 | z180,
-	"LE",			LE,			i8080 | i8085 | z80 | z180,
+	"LE",		LE,				i8080 | i8085 | z80 | z180,
 	"LHLD",		LHLD,			i8080 | i8085 | z80 | z180,
 	"LIXD",		LIXD,			z80 | z180,
 	"LIYD",		LIYD,			z80 | z180,
-	"LOCAL",		LOCAL,		i8080 | i8085 | z80 | z180,
+	"LOCAL",	LOCAL,			i8080 | i8085 | z80 | z180,
 	"LOW",		LOW,			i8080 | i8085 | z80 | z180,
 	"LSPD",		LSPD,			z80 | z180,
-	"LT",			LT,			i8080 | i8085 | z80 | z180,
+	"LT",		LT,				i8080 | i8085 | z80 | z180,
 	"LXI",		LXI,			i8080 | i8085 | z80 | z180
 	};
 
 static preservada resm [] =
 	{
-	"M",			M,				i8080 | i8085 | z80 | z180,
-	"MACLIB",	MACLIB,		i8080 | i8085 | z80 | z180,
-	"MACRO",		MACRO,		i8080 | i8085 | z80 | z180,
+	"M",		M,				i8080 | i8085 | z80 | z180,
+	"MACLIB",	MACLIB,			i8080 | i8085 | z80 | z180,
+	"MACRO",	MACRO,			i8080 | i8085 | z80 | z180,
 	"MLT",		MLT,			z180,
 	"MOD",		MOD,			i8080 | i8085 | z80 | z180,
 	"MOV",		MOV,			i8080 | i8085 | z80 | z180,
@@ -185,7 +185,7 @@ static preservada resm [] =
 static preservada resn [] =
 	{
 	"NAME",		NAME,			i8080 | i8085 | z80 | z180,
-	"NE",			NE,			i8080 | i8085 | z80 | z180,
+	"NE",		NE,				i8080 | i8085 | z80 | z180,
 	"NEG",		NEG,			z80 | z180,
 	"NOP",		NOP,			i8080 | i8085 | z80 | z180,
 	"NOT",		NOT,			i8080 | i8085 | z80 | z180,
@@ -194,15 +194,15 @@ static preservada resn [] =
 
 static preservada reso [] =
 	{
-	"OR",			OR,			i8080 | i8085 | z80 | z180,
+	"OR",		OR,				i8080 | i8085 | z80 | z180,
 	"ORA",		ORA,			i8080 | i8085 | z80 | z180,
 	"ORG",		ORG,			i8080 | i8085 | z80 | z180,
 	"ORI",		ORI,			i8080 | i8085 | z80 | z180,
 	"OTDM",		OTDM,			z180,
-	"OTDMR",		OTDMR,		z180,
+	"OTDMR",	OTDMR,			z180,
 	"OTDR",		OTDR,			z80 | z180,
 	"OTIM",		OTIM,			z180,
-	"OTIMR",		OTIMR,		z180,
+	"OTIMR",	OTIMR,			z180,
 	"OTIR",		OTIR,			z80 | z180,
 	"OUT",		OUT,			i8080 | i8085 | z80 | z180,
 	"OUT0",		OUT0,			z180,
@@ -218,16 +218,16 @@ static preservada resp [] =
 	"PCIY",		PCIY,			z80 | z180,
 	"POP",		POP,			i8080 | i8085 | z80 | z180,
 	"PSW",		PSW,			i8080 | i8085 | z80 | z180,
-	"PUBLIC",	PUBLIC,		i8080 | i8085 | z80 | z180,
+	"PUBLIC",	PUBLIC,			i8080 | i8085 | z80 | z180,
 	"PUSH",		PUSH,			i8080 | i8085 | z80 | z180
 	};
 
 static preservada resr [] =
 	{
-	"R",			R,				z80 | z180,
+	"R",		R,				z80 | z180,
 	"RAL",		RAL,			i8080 | i8085 | z80 | z180,
 	"RAR",		RAR,			i8080 | i8085 | z80 | z180,
-	"RC",			RC,			i8080 | i8085 | z80 | z180,
+	"RC",		RC,				i8080 | i8085 | z80 | z180,
 	"REPT",		REPT,			i8080 | i8085 | z80 | z180,
 	"RES",		RES,			z80 | z180,
 	"RET",		RET,			i8080 | i8085 | z80 | z180,
@@ -236,18 +236,18 @@ static preservada resr [] =
 	"RIM",		RIM,			i8085,
 	"RLC",		RLC,			i8080 | i8085 | z80 | z180,
 	"RLD",		RLD,			z80 | z180,
-	"RM",			RM,			i8080 | i8085 | z80 | z180,
+	"RM",		RM,				i8080 | i8085 | z80 | z180,
 	"RNC",		RNC,			i8080 | i8085 | z80 | z180,
 	"RNV",		RPO,			z80 | z180,
 	"RNZ",		RNZ,			i8080 | i8085 | z80 | z180,
-	"RP",			RP,			i8080 | i8085 | z80 | z180,
+	"RP",		RP,				i8080 | i8085 | z80 | z180,
 	"RPE",		RPE,			i8080 | i8085 | z80 | z180,
 	"RPO",		RPO,			i8080 | i8085 | z80 | z180,
 	"RRC",		RRC,			i8080 | i8085 | z80 | z180,
 	"RRD",		RRD,			z80 | z180,
 	"RST",		RST,			i8080 | i8085 | z80 | z180,
-	"RV",			RPE,			z80 | z180,
-	"RZ",			RZ,			i8080 | i8085 | z80 | z180
+	"RV",		RPE,			z80 | z180,
+	"RZ",		RZ,				i8080 | i8085 | z80 | z180
 	};
 
 static preservada ress [] =
@@ -265,7 +265,7 @@ static preservada ress [] =
 	"SIYD",		SIYD,			z80 | z180,
 	"SLA",		SLA,			z80 | z180,
 	"SLP",		SLP,			z180,
-	"SP",			SP,			i8080 | i8085 | z80 | z180,
+	"SP",		SP,				i8080 | i8085 | z80 | z180,
 	"SPHL",		SPHL,			i8080 | i8085 | z80 | z180,
 	"SPIX",		SPIX,			z80 | z180,
 	"SPIY",		SPIY,			z80 | z180,
@@ -282,7 +282,7 @@ static preservada ress [] =
 static preservada rest [] =
 	{
 	"TST",		TST,			z180,
-	"TSTIO",		TSTIO,		z180
+	"TSTIO",	TSTIO,			z180
 	};
 
 static preservada resx [] =
