@@ -50,7 +50,7 @@
 #define max_mem_aloc (0x10000L / (masc_mem + 1))
 #define n_rot_macro_char 11		/* numero de bits para determinar mascara de alocacao de caracteres de macros */
 #define msk_rot_macro_char ((1 << n_rot_macro_char) - 1)
-#define cmsk_rot_macro_char ((1 << sizeof (int) * 8 - n_rot_macro_char) - 1)
+#define cmsk_rot_macro_char ((1 << (sizeof (int) * 8 - n_rot_macro_char)) - 1)
 #define max_char_aloc (cmsk_rot_macro_char + 1)
 
 /***************************** tipos de cpu *********************************/
@@ -109,7 +109,7 @@ typedef struct
 	int mac_np;
 	int mac_pp;
 	int mac_nl;
-	int m_loops;
+	unsigned int m_loops;
 	unsigned int n_rept;
 	int exp_tipo_macro;
 	unsigned int mac_char;
@@ -433,7 +433,7 @@ int resta_car;								/* numero de caracteres que falta p/ ler linha atual */
 char nomes_locais [max_clocais];		/* buffer com nomes de labels locais da macro sendo expandida */
 int expressao_em_parametro;
 unsigned char *tab_mem_aloc [max_mem_aloc];
-int nmem_aloc;
+unsigned int nmem_aloc;
 simb *inic_simbolo [inic_simb_size];
 simb *aloc_simb [max_simb_aloc];
 int nset_simb;
@@ -447,7 +447,7 @@ int arqrel;									/* arquivo de saida */
 int arq_sym;								/* arquivo de simbolos */
 int atomos_colocados;					/* atomos salvos na atual alocacao */
 int naloc;									/* numero de unidades alocadas p/ guardar atomos */
-int m_loops;								/* numero de irp, irpc e rept ja executados */
+unsigned int m_loops;					/* numero de irp, irpc e rept ja executados */
 int exp_tipo_macro;						/* tipo de macro sendo expandida */
 int despreza_linha;						/* faz analex ir mais rapido na primeira fase */
 unsigned char cpu;						/* tipo de cpu */

@@ -112,6 +112,8 @@ int compila (char *nome)
 	if (faz_simbolo)
 		cria_sym ();
 	termina ();
+
+	return 0;			// Just to keep the compiler happy.
 	}
 
 void passo1 (void)
@@ -511,8 +513,6 @@ void trata_inst (t_atomo atomo)
 	{
 	int comp, aux;
 	macro_desc *mac;
-	struct stat aux_buf;
-	char *env;
 
 	switch (atomo)
 		{
@@ -729,7 +729,7 @@ void trata_inst (t_atomo atomo)
 				break;
 
 			case 1:														/* irp */
-				if (++m_loops >= nparm)
+				if (++m_loops >= (unsigned int)nparm)
 					recupera_estado ();
 				else
 					{
@@ -2239,8 +2239,6 @@ void define_irp (void)
 void define_rept (void)
 	{
 	macro_desc *m;
-	simb *s;
-	t_atomo atomo;
 	int aux;
 
 	if (!(aux = expressao ()))
@@ -2301,6 +2299,7 @@ macro_desc *busca_macro (char n[])
 		}
 	if (i >= max_macro)
 		erro_fatal (NUMERO_DE_MACROS_EXCEDIDO);
+	return NULL;			// Just to make the compiler happy.
 	}
 
 /*****************************************************************************
@@ -2405,7 +2404,7 @@ void poe_nome (char *n)
 
 void salva_estado (void)
 	{
-	int i;
+	unsigned int i;
 
 	if (ppmac > max_mac_call)
 		erro_fatal (MUITAS_MACROS_SENDO_EXPANDIDAS);
@@ -2440,7 +2439,7 @@ void salva_estado (void)
 
 void recupera_estado (void)
 	{
-	int i;
+	unsigned int i;
 
 	if_counter = mac_pilha [--ppmac].if_counter;
 	monta = mac_pilha [ppmac].monta;
@@ -2485,7 +2484,6 @@ void pega_parametros (char *p, int *np)
 void get_par (char *p, int *np)
 	{
 	int escape, literal, valendo, i, posicao_final, rstring;
-	int exp;
 	char c, cstring;
 	char *ns, numero [(sizeof (long)) * 8 + 1];
 	int pos_numero, aux, salva;
@@ -2830,9 +2828,7 @@ void bytz80 (unsigned char byte1, unsigned char byte2)
 
 void coloca_byte (unsigned char byte, unsigned int posicao)
 	{
-	int i;
-
-	while (nmem_aloc < (posicao >> bit_rot_mem & (1 << 16 - bit_rot_mem) - 1) + 1)
+	while (nmem_aloc < ((posicao >> bit_rot_mem) & ((1 << (16 - bit_rot_mem))) - 1) + 1)
 		{
 		if (nmem_aloc >= max_mem_aloc)
 			erro_fatal (PROGRAMA_MUITO_GRANDE);
@@ -3069,8 +3065,7 @@ char *arq_include (char *path_list, char *arq)
 
 int exist (char *arq)
 	{
-	int aux;
-
+//nfgf	int aux;
 //nfgf	if ((aux = _chmod (arq, 0)) == -1)
 //nfgf		return 0;
 //nfgf	return aux & (FA_HIDDEN | FA_SYSTEM | FA_LABEL | FA_DIREC) ? 0 : 1;
@@ -3088,8 +3083,7 @@ simbolos e de macros.
 
 void constroi_pch (void)
 	{
-	int i;
-	unsigned int sn;
+	int sn;
 	simb *s;
 
 	inicia_saida ();			/* faz inicializacoes devidas */
@@ -3142,7 +3136,8 @@ void simbolo_pch (simb *s)
 
 void macro_pch (macro_desc *m)
 	{
-	unsigned int i, j;
+	int i;
+	unsigned int j;
 
 	for (i = 0; m -> nome [i] != '\0'; i++)
 		w_byte (m -> nome [i]);

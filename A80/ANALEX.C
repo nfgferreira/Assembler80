@@ -341,8 +341,8 @@ static struct
 t_atomo analex (void)
 	{
 	t_atomo atomo;
-	int i;
-	char nome [comp_max + 1];
+	unsigned int i;
+	//char nome [comp_max + 1];
 	uintptr_t ls;
 
 	if (voltou_atomo)
@@ -516,7 +516,7 @@ void desaloca (void)
 
 	for (i = 0; i < naloc; i++)
 		free ((void *) tab_ats [i]);
-	for (i = 0; i < nmem_aloc; i++)
+	for (i = 0; (unsigned int)i < nmem_aloc; i++)
 		free ((void *) tab_mem_aloc [i]);
 	for (i = 0; i < nset_simb; i++)
 		free ((void *) aloc_simb [i]);
@@ -562,9 +562,6 @@ void desaloca (void)
 t_atomo analex1 (void)
 	{
 	char c, tipo_string;
-	t_atomo atomo;
-	int i;
-	char palavra [comp_max + 1];
 
 	while ((c = le_car ()) == '\t' || c == ' ');
 	switch (c)
@@ -1483,120 +1480,18 @@ void rec_lex (void)
 /*****************************************************************************
 	mprintf ()
 
-	Emula printf, so que muito menor.
+	It used to be a printf-like function for performance purposes 30+ years
+	ago. Now it is simply better to use printf instead.
 
 *****************************************************************************/
 
 void cdecl mprintf (char *s, ...)
-	{
-	int escape, pos_numero;
-	char *aux, numero [(sizeof (long)) * 8 + 1];
-	va_list arg;
-
-	va_start (arg, s);		/* inicializa ponteiro p/ argumentos */
-	for (escape = 0; *s != '\0'; s++)
-		{
-		switch (*s)
-			{
-		case '\\':
-			if (!(escape = !escape))
-				putchar (*s);
-			break;
-
-		case '%':
-			if (escape)
-				{
-				putchar (*s);
-				escape = 0;
-				}
-			else
-				switch (*(++s))
-					{
-				case 'u':
-				case 'i':
-					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 10);
-					pos_numero = 0;
-					while (*aux != '\0')
-						{
-						if (pos_numero || *aux != '0')
-							{
-							pos_numero = 1;
-							putchar (*aux);
-							}
-						aux++;
-						}
-					if (!pos_numero)
-						putchar ('0');
-					break;
-
-				case 'c':
-					putchar (va_arg (arg, int));
-					break;
-
-				case '\0':
-				case '%':
-					putchar ('%');
-					break;
-
-				case 's':
-					aux = va_arg (arg, char *);
-					while (*aux != '\0')
-						putchar (*(aux++));
-					break;
-
-				default:
-					putchar ('%');
-					putchar (*s);
-					}
-			break;
-
-		default:
-			if (!escape)
-				putchar (*s);
-			else
-				{
-				escape = 0;
-				switch (*(++s))
-					{
-				case 'a':
-					putchar ('\a');
-					break;
-
-				case 'b':
-					putchar ('\b');
-					break;
-
-				case 'f':
-					putchar ('\f');
-					break;
-
-				case 'n':
-					putchar ('\n');
-					break;
-
-				case 'r':
-					putchar ('\r');
-					break;
-
-				case 't':
-					putchar ('\t');
-					break;
-
-				case 'v':
-					putchar ('\v');
-					break;
-
-				case '\0':
-					putchar ('\\');
-					break;
-
-				default:
-					putchar (*s);
-					}
-				}
-			}
-		}
-	}
+{
+	va_list args;
+	va_start (args, s);		/* inicializa ponteiro p/ argumentos */
+	printf (s, args);
+	return;
+}
 
 /* 1.30 - Estas duas rotinas abaixo substituem le_car antiga e get_car */
 
@@ -1679,16 +1574,16 @@ char le_car (void)
 				else						/* nao limita e termina: achou linha */
 					{
 					memcpy (buf_leit + resta_car, paux0, paux1 - paux0 + 1);
-					resta_car += paux1 - paux0 + 1;
+					resta_car += (int)(paux1 - paux0) + 1;
 					if (!ppmac)
 						buf_leit [resta_car - 1] = '\n';
 					}
 				if (ppmac)
-					mac_char += paux1 - paux0 + 1;
+					mac_char += (int)(paux1 - paux0) + 1;
 				else
 					{
-					le_cont += paux1 - paux0 + 1;
-					if (num_car -= paux1 - paux0 + 1)
+					le_cont += (int)(paux1 - paux0) + 1;
+					if (num_car -= (int)(paux1 - paux0) + 1)
 						{
 						num_car--;							/* pula '\n' */
 						le_cont++;

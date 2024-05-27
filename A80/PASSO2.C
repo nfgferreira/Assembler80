@@ -44,7 +44,6 @@ void pgm_passo2 (void)
 	t_atomo atomo;
 	int aux;
 	simb *memsimb;
-	int passou;
 
 	while (1)
 		{
@@ -143,6 +142,7 @@ void trata_ins2 (t_atomo atomo)
 	{
 	int comp;
 	int aux;
+	unsigned int aux1;
 
 	switch (atomo)
 		{
@@ -211,8 +211,8 @@ void trata_ins2 (t_atomo atomo)
 			{
 			if ((atomo = analex ()) == STRING && valor != 1)
 				{
-				for (aux = 0; aux < valor; aux++)
-					manda_byte ((int) string [aux]);
+				for (aux1 = 0; aux1 < valor; aux1++)
+					manda_byte ((int) string [aux1]);
 				comp += valor;
 				pc += valor;
 				}
@@ -984,7 +984,6 @@ void manda_publics (void)
 
 void cria_sym (void)
 	{
-	int i;
 	unsigned int sn;
 	simb *s;
 
@@ -1000,7 +999,7 @@ void cria_sym (void)
 	if (nset_simb)					/* so faz alguma coisa se existe simbolo */
 		{
 		ordena_tab_sym ();			/* ordena tabela de simbolos */
-		for (sn = 0; sn < ((nset_simb - 1) << nrot_aloc) + (nsimb_aloc - resta_simb); sn++)
+		for (sn = 0; (int)sn < ((nset_simb - 1) << nrot_aloc) + (nsimb_aloc - resta_simb); sn++)
 			if (((s = aloc_simb [(sn >> nrot_aloc) & c_mask_aloc] + (sn & mask_aloc)) -> atrib & (definido | extrn | set)) == definido)
 				if (s -> atrib & public || *(s -> nome) != '?')
 					imprime_simbolo (s);
@@ -1126,7 +1125,7 @@ void imprime_simbolo (simb *s)
 
 	num0 = num = ultoa ((unsigned long) s -> valor, n, 16);
 	while (*(++num0) != '\0');
-	for (i = 4 - (num0 - num); i; i--)
+	for (i = 4 - (int)(num0 - num); i; i--)
 		manda_car_sym ('0');
 	while (*num != '\0')
 		{

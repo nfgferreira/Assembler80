@@ -291,7 +291,7 @@ volta com path destino.
 char *combina (char *dest, char *org, char *ext)
 	{
 	static char nomeout [128];
-	int aux;
+	size_t aux;
 	char *caux;
 
 	org = tira_path (org);
@@ -334,10 +334,10 @@ char *combina (char *dest, char *org, char *ext)
 
 char *tira_path (char *org)
 	{
-	int i;
+	size_t i;
 
 	i = strlen (org);
-	while (i && org [i - 1] != '\\' & org [i - 1] != ':')
+	while (i && (org [i - 1] != '\\') && (org [i - 1] != ':'))
 		i--;
 	return org + i;
 	}
@@ -351,7 +351,7 @@ char *tira_path (char *org)
 
 char *nomeok (char *n, char *ext)
 	{
-	int i, j;
+	size_t i, j;
 	static char nomeout [128];
 
 	if ((i = strlen (n)) >= sizeof nomeout)
@@ -381,7 +381,7 @@ tem alguma extensao, ele e' substituida.
 
 char *poe_ext (char *n, char *ext)
 	{
-	int i, j;
+	size_t i, j;
 	static char nomeout [128];
 
 	if ((i = strlen (n)) >= sizeof nomeout)

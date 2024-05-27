@@ -783,7 +783,6 @@ pendentes sao todas efetuadas e o valor da expressao fica no topo da pilha.
 
 int expr (void)
 	{
-	t_atomo atomo;
 	int erro;								/* erro retornado por rotinas de acoes semanticas */
 
 	estado = 0;
