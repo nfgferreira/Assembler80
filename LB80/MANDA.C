@@ -315,7 +315,7 @@ void copy (char *dst, char *org)
 	if ((d = open (dst, O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
 		{
 		close (o);
-		mprintf ("ERRO FATAL: nao conseguiu abrir arquivo %s\n", str_maiuscula (dst));
+		mprintf ("FATAL ERROR: failed to open file %s\n", str_maiuscula (dst));
 		return;
 		}
 

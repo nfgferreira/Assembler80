@@ -31,14 +31,14 @@ void cdecl main (int argc, char *argv [])
 		{
 		if ((arq = open (argv [1] + 1, O_TEXT | O_RDONLY)) == -1)
 			{
-			mprintf ("Nao conseguiu abrir arquivo %s\n", argv [1] + 1);
+			mprintf ("Failed to open file %s\n", argv [1] + 1);
 			exit (1);
 			}
 		tam_arq = read (arq, buf_prj, (sizeof buf_prj) - 1);
 		if (read (arq, buf_prj, sizeof buf_prj))
 			{
 			close (arq);
-			mprintf ("Arquivo muito grande: %s\n", argv [1] + 1);
+			mprintf ("The file is too big: %s\n", argv [1] + 1);
 			exit (1);
 			}
 		close (arq);
@@ -54,7 +54,7 @@ void cdecl main (int argc, char *argv [])
 					tem_parametro = 0;
 					if (_argc >= (sizeof (__argv)) / (sizeof (char *)))
 						{
-						mprintf ("Muitos parametros em %s\n", argv [1] + 1);
+						mprintf ("Too many paramters in %s\n", argv [1] + 1);
 						exit (1);
 						}
 					}
@@ -71,7 +71,7 @@ void cdecl main (int argc, char *argv [])
 			buf_prj [i] = '\0';
 			if (_argc >= (sizeof (__argv)) / (sizeof (char *)))
 				{
-				mprintf ("Muitos parametros em %s\n", argv [1] + 1);
+				mprintf ("Too many paramters in %s\n", argv [1] + 1);
 				exit (1);
 				}
 			}
@@ -113,12 +113,12 @@ void faz_link (int argc, char *argv [])
 		case 'C':
 			if (tem_c)
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 			if (pega_hex (argv[i] + 2, (int *) &areac))
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 			tem_c = 1;
@@ -128,12 +128,12 @@ void faz_link (int argc, char *argv [])
 		case 'D':
 			if (tem_d)
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 			if (pega_hex (argv[i] + 2, (int *) &aread))
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 			tem_d = 1;
@@ -143,7 +143,7 @@ void faz_link (int argc, char *argv [])
 		case 'S':
 			if (sym != NULL)
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 			sym = argv [i] + 2;
@@ -153,32 +153,32 @@ void faz_link (int argc, char *argv [])
 		case 'R':
 			if (rel != NULL)
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 			rel = argv [i] + 2;
 			break;
 
 		default:
-			mprintf ("Parametro invalido: %s\n", argv [i]);
+			mprintf ("Invalid parameter: %s\n", argv [i]);
 			exit (1);
 			}
 
 	if (argc - i < 2)
 		{
-		mprintf ("Numero de parametros insuficiente.\n");
+		mprintf ("Not enough parameters.\n");
 		exit (1);
 		}
 
 	if ((*argv [i + 1] == '-' || *argv [i + 1] == '/') && (*(argv [i + 1] + 1) == 'l' || *(argv [i + 1] + 1) == 'L'))
 		{
-		mprintf ("Primeiro arquivo origem nao pode ser biblioteca.\n");
+		mprintf ("First file cannot be a library.\n");
 		exit (1);
 		}
 
 	if ((destino = open (n_dest = argv [i++], O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
 		{
-		mprintf ("Nao conseguiu abrir arquivo destino: %s\n", argv [i - 1]);
+		mprintf ("Could not open destination file: %s\n", argv [i - 1]);
 		exit (1);
 		}
 
@@ -190,11 +190,11 @@ void faz_link (int argc, char *argv [])
 		break;						/* caso ok: compila */
 
 	case 1:
-		mprintf ("Nome de arquivo de simbolos muito comprido. Programa nao foi montado.\n");
+		mprintf ("The symbol file name is too long. The program was not linked.\n");
 		exit (1);
 
 	case 2:
-		mprintf ("Nome de arquivo relocavel muito comprido. Programa nao foi montado.\n");
+		mprintf ("The relocatable file name is too long. The program was not linked\n");
 		exit (1);
 		}
 
@@ -207,41 +207,41 @@ void faz_link (int argc, char *argv [])
 		switch (erro)
 			{
 		case 1:
-			mprintf ("HA INCOERENCIA EM ARQUIVO");
+			mprintf ("THERE IS AN INCONSISTENCY IN THE FILE");
 			break;
 
 		case 2:
-			mprintf ("ERRO INTERNO");
+			mprintf ("INTERNAL ERROR");
 			break;
 
 		case 3:
-			mprintf ("ENDERECO DE CODIGO ULTRAPASSOU 64K");
+			mprintf ("CODE ADDRESS BEYOND 64K");
 			break;
 
 		case 4:
-			mprintf ("ENDERECO DE DADOS ULTRAPASSOU 64K");
+			mprintf ("DATA ADDRESS BEYOND 64K");
 			break;
 
 		case 5:
-			mprintf ("CONFLITO DE ENDERECOS ENTRE AREAS DE CODIGO E DADOS");
+			mprintf ("CODE AND DATA ADDRESS CONFLICT");
 			break;
 
 		case 6:
-			mprintf ("ERRO DE ESCRITA EM DISCO");
+			mprintf ("DISK WRITE ERROR");
 			break;
 
 		case 7:
-			mprintf ("NAO CONSEGUIU ABRIR ARQUIVO DE SIMBOLOS");
+			mprintf ("COULD NOT OPEN SYMBOL FILE");
 			break;
 
 		case 8:
-			mprintf ("NAO CONSEGUIU ABRIR ARQUIVO RELOCAVEL DE SAIDA");
+			mprintf ("COULD NOT OPEN RELOCATABLE OUTPUT FILE");
 			break;
 
 		default:
-			mprintf ("ERRO INTERNO");
+			mprintf ("INTERNAL ERROR");
 			}
-		mprintf (".\nEXECUCAO ABORTADA.\n");
+		mprintf (".\nABORTING.\n");
 		close (destino);
 		apaga_arqs (n_dest, sym, rel);		/* destroi arquivos destinos */
 		termina (1);
@@ -279,10 +279,10 @@ void faz_link (int argc, char *argv [])
 				cria_sym (nome_arq_sym);
 
 			if (catual)
-				mprintf ("CODIGO: [%X-%X] (%X)\n", areac, areac + catual - 1, catual);
+				mprintf ("CODE: [%X-%X] (%X)\n", areac, areac + catual - 1, catual);
 			if (datual)
-				mprintf ("DADOS:  [%X-%X] (%X)\n", aread, aread + datual - 1, datual);
-			mprintf ("\nLINK TERMINADO COM SUCESSO.\n");
+				mprintf ("DATA:  [%X-%X] (%X)\n", aread, aread + datual - 1, datual);
+			mprintf ("\nLINK FINISHED SUCCESSFULLY.\n");
 			}
 	close (destino);
 	if (resultado || simbolo_redefinido || tem_nao_definido)
@@ -303,19 +303,19 @@ void faz_link (int argc, char *argv [])
 
 void explica (void)
 	{
-	mprintf ("\nForma de chamada:\n");
-	mprintf ("l80 [opcoes] arquivo_destino arquivo_origem {[-L]arquivo_origem}\n\n");
-	mprintf (" Opcoes:    -Chhhh  define area de codigo\n");
-	mprintf ("            -Dhhhh  define area de dados\n");
-	mprintf ("            -S[arq] gera arquivo com tabela de simbolos\n");
-	mprintf ("            -R[arq] gera arquivo relocavel com simbolos definidos\n\n");
-	mprintf ("            -L      indica que arquivo deve ser tratado como biblioteca\n\n");
+	mprintf ("\nCall instructions:\n");
+	mprintf ("l80 [options] dest_file source_file {[-L]source_file}\n\n");
+	mprintf (" Options:   -Chhhh  define code area\n");
+	mprintf ("            -Dhhhh  define data area\n");
+	mprintf ("            -S[arq] create symbol table file\n");
+	mprintf ("            -R[arq] create relocatable file of defined symbols\n\n");
+	mprintf ("            -L      the file is a library\n\n");
 	mprintf (" Defaults:  -C:     0000\n");
-	mprintf ("            -D:     fim da area de codigo\n\n");
-	mprintf (" Terminacoes default:  arquivo_origem:      .rel se nao for biblioteca\n");
-	mprintf ("                                            .lib se for\n");
-	mprintf ("                       arquivo de simbolos: .sym\n");
-	mprintf ("                       arquivo relocavel:   .rel\n");
+	mprintf ("            -D:     end of code area\n\n");
+	mprintf (" Default extensions:   source_file:        .rel if it is not a library\n");
+	mprintf ("                                           .lib if it is\n");
+	mprintf ("                       symbol file:        .sym\n");
+	mprintf ("                       relocatable file:   .rel\n");
 	}
 
 /*****************************************************************************
@@ -555,7 +555,7 @@ int linca (char *arq)
 	if ((*arq == '-' || *arq == '/') && (*(arq + 1) == 'l' || *(arq + 1) == 'L'))
 		if (*(arq + 2) == '\0')
 			{
-			mprintf ("Parametro invalido: %s\nEXECUCAO ABORTADA.\n", arq);
+			mprintf ("Invalid parameter: %s\nABORTING.\n", arq);
 			return 1;
 			}
 		else
@@ -566,7 +566,7 @@ int linca (char *arq)
 
 	if ((l_file = open (nome = nomeok (arq, lib ? "lib" : "rel"), O_BINARY | O_RDONLY)) == -1)
 		{
-		mprintf ("NAO CONSEGUIU ABRIR ARQUIVO %s\nEXECUCAO ABORTADA.\n", str_maiuscula (nome));
+		mprintf ("FAILE TO OPEN FILE %s\nABORTING.\n", str_maiuscula (nome));
 		return 1;
 		}
 
@@ -577,50 +577,50 @@ int linca (char *arq)
 		switch (erro)
 			{
 		case 1:
-			mprintf ("%s: ARQUIVO INVALIDO", str_maiuscula (nome));
+			mprintf ("%s: INVALID FILE", str_maiuscula (nome));
 			break;
 
 		case 2:
-			mprintf ("%s(%s): MODULO INVALIDO", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): INVALID MODULE", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 3:
-			mprintf ("%s(%s): OVERFLOW NA TABELA DE SIMBOLOS", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): SYMBOL TABLE OVERFLOW", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 4:
-			mprintf ("%s(%s): MEMORIA INSUFICIENTE", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): INSUFFICIENT MEMORY", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 5:
-			mprintf ("%s(%s): CODIGO EM ENDERECO ABSOLUTO", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): CODE IN ABSOLUTE ADDRESS", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 6:
-			mprintf ("%s(%s): ULTRAPASSADOS 64K DE CODIGO NA AREA DE CODIGO", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): MORE THAN 64K OF CODE", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 7:
-			mprintf ("%s(%s): ULTRAPASSADOS 64K DE CODIGO NA AREA DE DADOS", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): MORE THAN 64K OF DATA", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 8:
-			mprintf ("%s(%s): NUMERO DE OFFSETS DE SIMBOLOS EXTERNOS EXCEDIDO", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): NUMBER OF EXTERNAL SYMBOL OFFSETS EXCEEDED", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 9:
-			mprintf ("%s(%s): ERRO INTERNO", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): INTERNAL ERROR", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		case 10:
-			mprintf ("%s(%s): CODIGO RETORNOU PARA TRAS", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): CODE WENT BACK", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			break;
 
 		default:
-			mprintf ("%s(%s): ERRO INTERNO", str_maiuscula (nome), str_maiuscula (nome_modulo));
+			mprintf ("%s(%s): INTERNAL ERROR", str_maiuscula (nome), str_maiuscula (nome_modulo));
 			}
 
-		mprintf (".\nEXECUCAO ABORTADA.\n");
+		mprintf (".\nABORTING.\n");
 		close (l_file);
 		return 1;
 		}

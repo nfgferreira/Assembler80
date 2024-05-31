@@ -29,60 +29,61 @@ int tipo_macro;					/* tipo de macro sendo definida: 0 = macro normal
 
 #define bytmem(byte) (coloca_byte (byte, pmem))
 
+// Numbers match tipo_erros definitions in VARIAVEIS.H. 
 static char *erro_tab[] =
 	{
-	"Dupla definicao.",
-	"Numero muito grande.",
-	"Numero invalido.",
-	"Virgula esperada.",
-	"Instrucao invalida.",
-	"Parametro invalido.",
-	"Expressao invalida.",
-	"Ultrapassados 64K de codigo.",
-	"Fecha ) esperado.",
-	"Numero esperado.",
-	"NOT invalido.",
-	"Unario - invalido.",
-	"HIGH com numero relocavel.",
-	"LOW com numero relocavel.",
-	"AND invalido.",
-	"Soma invalida.",
-	"Subtracao invalida.",
-	"Comparacao invalida.",
-	"Erro interno do montador.",
-	"Muitos operandos pendentes.",
-	"Identificador indefinido.",
-	"Tabela de simbolos cheia.",
-	"OR invalido.",
-	"XOR invalido.",
-	"Nome esperado.",
-	"Muitos externos definidos.",
-	"Passo 2 diferente do passo 1.",
-	"String muito grande.",
-	"Fim de string esperado.",
-	"Muitos if's aninhados.",
-	"Else nao aninhado com if.",
-	"Endif nao aninhado com if.",
-	"Numero de if's maior do que o de endif's.",
-	"Incluindo arquivo em arquivo que ja esta sendo incluido.",
-	"Muitos niveis de parenteses.",
-	"Divisao por zero.",
-	"ENDM esperado.",
-	"Numero de macros acima do limite.",
-	"Muito codigo em macros.",
-	"Total de parametros e rotulos locais em macros muito grande.",
-	"Numero de expansoes simultaneas de macros muito grande.",
-	"Muitos caracteres na passagem de parametros para macro.",
-	"Memoria insuficiente (fatal).",
-	"Muitos nomes locais em macro.",
-	"Multiplicacao invalida.",
-	"Erro de fase.",
-	"Fim de linha esperado.",
-	"Simbolo PUBLIC e set.",
-	"Divisao invalida.",
-	"Deslocamento invalido.",
-	"Caracter inesperado.",
-	"Arquivo PCH inconsistente."
+	"Double definition.",
+	"Number is too large.",
+	"Invalid number.",
+	"Expecting comma.",
+	"Invalid instruction.",
+	"Invalid parameter.",
+	"Invalid expression.",
+	"More than 64K of code.",
+	"Expecting closing parenthesis.",
+	"Expecting number.",
+	"Invalid NOT.",
+	"Invalid unary -.",
+	"HIGH not allowed with relocatable number.",
+	"LOW not allowed with relocatable number.",
+	"Invalid AND.",
+	"Invalid addition.",
+	"Invalid subtraction.",
+	"Invalid comparison.",
+	"Internal error.",
+	"Too many pending operands.",
+	"Undefined identifier.",
+	"Symbol table full.",
+	"Invalid OR.",
+	"Invalid XOR.",
+	"Expecting name.",
+	"Too many externals defined.",
+	"Step 2 is different than step 1.",
+	"String too large.",
+	"Expecting end of string.",
+	"Too many nested IFs.",
+	"Else does not match IF.",
+	"Endif does not match IF.",
+	"Number of IFs larger than ENDIFs.",
+	"Nested insert.",
+	"Too many parenthesis levels.",
+	"Dividing by 0.",
+	"Expecting ENDM.",
+	"Maximum number of macros reached.",
+	"Too much code inside macros.",
+	"Number of macro local parameters and labels exceeded.",
+	"Number of simultaneous macro expansions exceeded.",
+	"Number of characters in macro parameters exceeded.",
+	"Insufficient memory (fatal).",
+	"Number of macro local names exceeded.",
+	"Invalid multiplication.",
+	"Phase error.",
+	"Expecting end of line.",
+	"PUBLIC symbol and set.",
+	"Invalid division.",
+	"Invalid shift.",
+	"Unexpected character.",
+	"Inconsistent PCH file."
 	};
 
 static char *nmacro = " macro";
@@ -126,7 +127,7 @@ void passo1 (void)
 	simb *memsimb;
 	macro_desc *mac;
 
-	mprintf ("PASSO 1\n");
+	mprintf ("STEP 1\n");
 	while (1)
 		{
 		while ((atomo = analex ()) == EOL);
@@ -2182,7 +2183,7 @@ void erro_fatal (int erronum)
 
 void grave (void)
 	{
-	mprintf ("MONTAGEM ABORTADA\n");
+	mprintf ("ABORTING\n");
 	desaloca ();
 	longjmp (finaliza, 2);
 	}
@@ -2192,14 +2193,14 @@ void termina (void)
 	desaloca ();				/* desaloca memoria */
 	if (!erros)
 		{
-		mprintf ("Montagem terminada com sucesso.\n");
+		mprintf ("Assembly finished successfully.\n");
 		longjmp (finaliza, 1);
 		}
 
 	if (erros == 1)
-		mprintf ("Montagem terminada. 1 erro.\n");
+		mprintf ("Assembly finished with 1 error.\n");
 	else
-		mprintf ("Montagem terminada. %u erros.\n", erros);
+		mprintf ("Assembly finished with %u errors.\n", erros);
 
 	longjmp (finaliza, 2);
 	}

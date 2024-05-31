@@ -13,7 +13,7 @@ void cdecl main (int argc, char *argv[])
 	{
 	int i, npar;
 	char *env, caux;
-	char *mensagem = "A80: Montador 8080/8085/Z80/Z180 - Versao 2.01\n";
+	char *mensagem = "A80: 8080/8085/Z80/Z180 assembler - Version 2.02\n";
 
 	while (*mensagem != '\0')		/* imprime mensagem */
 		putc (*(mensagem++), stderr);
@@ -30,7 +30,7 @@ void cdecl main (int argc, char *argv[])
 		{
 		if (strlen (env) >= sizeof argv_aux)
 			{
-			mprintf ("Variavel de ambiente muito comprida:\n%s\n", env);
+			mprintf ("Environment variable is too long:\n%s\n", env);
 			exit (1);
 			}
 		strcpy (argv_aux, env);
@@ -45,7 +45,7 @@ void cdecl main (int argc, char *argv[])
 				{
 				if (npar >= sizeof __argv / sizeof (char *))
 					{
-					mprintf ("Ultrapassado o limite de parametros na chamada.\n");
+					mprintf ("The maximum number of parameters was exceeded.\n");
 					exit (1);
 					}
 				__argv [npar++] = argv_aux + i;	/* aponta para parametro */
@@ -60,7 +60,7 @@ void cdecl main (int argc, char *argv[])
 		for (i = 1; i < argc; i++)
 			if (npar >= sizeof __argv / sizeof (char *))
 				{
-				mprintf ("Ultrapassado o limite de parametros na chamada.\n");
+				mprintf ("The maximum number of parameters was exceeded.\n");
 				exit (1);
 				}
 			else
@@ -87,7 +87,7 @@ void a80 (int argc, char *argv[])
 					{
 					if (strlen (argv [i] + 2) >= sizeof (nome_saida))
 						{
-						mprintf ("Nome muito comprido: %s\n", argv [i] + 2);
+						mprintf ("Name is too long: %s\n", argv [i] + 2);
 						exit (1);
 						}
 					strcpy (nome_saida, argv [i] + 2);
@@ -113,7 +113,7 @@ void a80 (int argc, char *argv[])
 				cpu = z180;
 			else
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 		else if (*argv [i] == '+')
@@ -124,7 +124,7 @@ void a80 (int argc, char *argv[])
 					{
 					if (strlen (argv [i] + 2) >= sizeof (nome_sym))
 						{
-						mprintf ("Nome muito comprido: %s\n", argv [i] + 2);
+						mprintf ("Name is too long: %s\n", argv [i] + 2);
 						exit (1);
 						}
 					strcpy (nome_sym, argv [i] + 2);
@@ -139,7 +139,7 @@ void a80 (int argc, char *argv[])
 				monta_pch = 1;
 			else
 				{
-				mprintf ("Parametro invalido: %s\n", argv [i]);
+				mprintf ("Invalid parameter: %s\n", argv [i]);
 				exit (1);
 				}
 		else
@@ -149,7 +149,7 @@ void a80 (int argc, char *argv[])
 
 			if ((hFile = _findfirst (argv [i], &c_file)) == -1)
 				{
-				mprintf ("Nao foi encontrado arquivo %s\n", argv [i]);
+				mprintf ("Did not find file %s\n", argv [i]);
 				retorno = 1;
 				}
 			else
@@ -172,19 +172,19 @@ void a80 (int argc, char *argv[])
 							break;
 
 						case 1:									/* pau no arquivo de simbolos */
-							mprintf ("Nome de arquivo de simbolos muito comprido. Programa nao foi montado.\n");
+							mprintf ("Symbol file name is too long. The program was not assembled.\n");
 							retorno = 1;
 							break;
 
 						case 2:
-							mprintf ("Nome de arquivo destino muito comprido. Programa nao foi montado.\n");
+							mprintf ("Output file name is too long. The program was not assembled.\n");
 							retorno = 1;
 							break;
 							}
 						}
 					else
 						{
-						mprintf ("Nome muito comprido: %s\n", argv [i]);
+						mprintf ("Name is too long: %s\n", argv [i]);
 						exit (1);
 						}
 					}
@@ -236,20 +236,20 @@ int monta_nome (char *s1, char *s2)
 
 void explica (void)
 	{
-	mprintf ("\nForma de chamada:\n");
-	mprintf ("a80 {[opcoes] arquivo_origem}\n\n");
-	mprintf (" Opcoes:    -I[path{;path}] determina opcoes para busca de arquivos\n");
-	mprintf ("            -R[path]        define arquivo destino\n");
-	mprintf ("            -S              nao cria arquivo com tabela de simbolos\n");
-	mprintf ("            +S[path]        cria arquivo com tabela de simbolos\n");
-	mprintf ("            -H              nao usa cabecalho pre compilado\n");
-	mprintf ("            +H              usa cabecalho pre compilado\n");
-	mprintf ("            -P              nao monta cabecalho pre compilado\n");
-	mprintf ("            +P              monta cabecalho pre compilado\n");
+	mprintf ("\nCall instructions:\n");
+	mprintf ("a80 {[options] source_file}\n\n");
+	mprintf (" Options:   -I[path{;path}] include paths\n");
+	mprintf ("            -R[path]        output file\n");
+	mprintf ("            -S              do not create symbol table file\n");
+	mprintf ("            +S[path]        create symbol table file\n");
+	mprintf ("            -H              do not use pre-compiled header\n");
+	mprintf ("            +H              use pre-compiled header\n");
+	mprintf ("            -P              do not create pre-compiled header\n");
+	mprintf ("            +P              create pre-compiled-header\n");
 	mprintf ("            -8080\n");
 	mprintf ("            -8085\n");
 	mprintf ("            -Z80\n");
-	mprintf ("            -Z180           seleciona micro processador\n\n");
+	mprintf ("            -Z180           select CPU\n\n");
 	mprintf (" Defaults:  -8080 -H -P -S\n");
 	}
 

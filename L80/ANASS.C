@@ -293,7 +293,7 @@ void trata_define_entry_point (void)
 		{
 		if (simbolo -> definido)
 			{
-			mprintf ("%s(%s): SIMBOLO %s REDEFINIDO.\n", str_maiuscula (nome), str_maiuscula (nome_modulo), simbolo -> nome);
+			mprintf ("%s(%s): SYMBOL %s IS REDEFINED.\n", str_maiuscula (nome), str_maiuscula (nome_modulo), simbolo -> nome);
 			simbolo_redefinido = 1;
 			}
 		else
@@ -533,7 +533,7 @@ void trata_nao_definidos (void)
 	int coluna = 0;
 	int nlinha = 0;
 
-	mprintf ("\nSIMBOLOS NAO DEFINIDOS:");
+	mprintf ("\nUNDEFINED SYMBOLS:");
 
 	for (i = 0; i < inic_simb_size; i++)
 		if ((s = inic_simbolo [i]) != NULL)

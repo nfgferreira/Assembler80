@@ -28,7 +28,7 @@ extern char *falha_de_abertura;
 
 void passo2 ()
 	{
-	mprintf ("PASSO 2\n");
+	mprintf ("STEP 2\n");
 	inicia_saida ();
 	define_nome ();
 	manda_nome ();
@@ -944,7 +944,7 @@ void manda_entry_symbols (void)
 				else
 					{
 					erros++;
-					mprintf ("%s declarado publico mas nao definido.\n", smb -> nome);
+					mprintf ("%s is declared public but has not been defined.\n", smb -> nome);
 					}
 	}
 
@@ -992,7 +992,7 @@ void cria_sym (void)
 	if ((arq_sym = open (nome_arq_sym, O_TRUNC | O_CREAT | O_TEXT | O_WRONLY, S_IWRITE)) == -1)
 		{
 		arq_sym = 0;
-		mprintf ("NAO CONSEGUIU ABRIR ARQUIVO DE SIMBOLOS.\n");
+		mprintf ("FAILED TO OPEN SYMBOL FILE.\n");
 		return;
 		}
 
@@ -1171,7 +1171,7 @@ void escreve (int handle, char *buffer, unsigned int count)
 	{
 	if (write (handle, buffer, count) == -1)
 		{
-		mprintf ("DISCO CHEIO.\n");
+		mprintf ("DISK FULL.\n");
 		grave ();
 		}
 	}

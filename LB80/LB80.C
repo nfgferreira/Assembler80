@@ -31,14 +31,14 @@ void cdecl main (int argc, char *argv [])
 		{
 		if ((arq = open (argv [1] + 1, O_TEXT | O_RDONLY)) == -1)
 			{
-			mprintf ("Nao conseguiu abrir arquivo %s\n", argv [1] + 1);
+			mprintf ("Failed to open file %s\n", argv [1] + 1);
 			exit (1);
 			}
 		tam_arq = read (arq, buf_prj, (sizeof buf_prj) - 1);
 		if (read (arq, buf_prj, sizeof buf_prj))
 			{
 			close (arq);
-			mprintf ("Arquivo muito grande: %s\n", argv [1] + 1);
+			mprintf ("The file is too large: %s\n", argv [1] + 1);
 			exit (1);
 			}
 		close (arq);
@@ -54,7 +54,7 @@ void cdecl main (int argc, char *argv [])
 					tem_parametro = 0;
 					if (_argc >= (sizeof (_argv)) / (sizeof (char *)))
 						{
-						mprintf ("Muitos parametros em %s\n", argv [1] + 1);
+						mprintf ("Too many parameters in %s\n", argv [1] + 1);
 						exit (1);
 						}
 					}
@@ -71,7 +71,7 @@ void cdecl main (int argc, char *argv [])
 			buf_prj [i] = '\0';
 			if (_argc >= (sizeof (_argv)) / (sizeof (char *)))
 				{
-				mprintf ("Muitos parametros em %s\n", argv [1] + 1);
+				mprintf ("Too many parameters in %s\n", argv [1] + 1);
 				exit (1);
 				}
 			}
@@ -148,14 +148,14 @@ void edita (int npar, char *par [])
 		arqn = 0;
 		if (!arqo)				/* erro de chamada: nao ha arquivo novo nem velho */
 			{
-			mprintf ("Falta arquivo de saida.\n");
+			mprintf ("Output file is missing.\n");
 			termina (1);
 			}
 		}
 
 	if ((arqout = open (temp = mktemp (temp), O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
 		{
-		mprintf ("Falha de abertura de arquivo temporario.\n");
+		mprintf ("Failed to open temporary file.\n");
 		termina (1);
 		}
 
@@ -168,7 +168,7 @@ void edita (int npar, char *par [])
 	unlink (temp);
 	for (i = 0; i < ncom; i++, com++)
 		if (*com != NULL)
-			mprintf ("AVISO: comando %s desprezado.\n", *com);
+			mprintf ("WARNING: command %s was ignored.\n", *com);
 	}
 
 /*****************************************************************************
@@ -210,7 +210,7 @@ void tira_subst (char *arq, int arqout, char **com, int ncom)
 		case 2:										/* copiar modulo em .rel */
 			if ((arqrel = open (file = nomeok (simbolo -> nome, "rel"), O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
 				{
-				mprintf ("Falha de abertura de arquivo %s\n", str_maiuscula (file));
+				mprintf ("Failed to open file %s\n", str_maiuscula (file));
 				termina (1);
 				}
 			inicia_saida1 ();
@@ -221,7 +221,7 @@ void tira_subst (char *arq, int arqout, char **com, int ncom)
 		case 3:										/* excluir modulo e copiar em .rel */
 			if ((arqrel = open (file = nomeok (simbolo -> nome, "rel"), O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
 				{
-				mprintf ("Falha de abertura de arquivo %s\n", str_maiuscula (file));
+				mprintf ("Failed to open file %s\n", str_maiuscula (file));
 				termina (1);
 				}
 			inicia_saida1 ();
@@ -367,13 +367,13 @@ void parse_mod (int arq1, int arq2)
 
 void explica (void)
 	{
-	mprintf ("\nForma de chamada:\n");
-	mprintf ("lb80 [arquivo velho] [opcoes] [arquivo novo]\n");
-	mprintf (" Opcoes : +arq    inclui arquivo na biblioteca\n");
-	mprintf ("          -mod    exclui modulo da biblioteca\n");
-	mprintf ("          -+mod   substitui modulo pelo arquivo mod.rel\n");
-	mprintf ("          *mod    copia o conteudo do modulo no arquivo mod.rel\n");
-	mprintf ("          -*mod   exclui modulo e copia no arquivo mod.rel\n");
+	mprintf ("\nCall instructions:\n");
+	mprintf ("lb80 [old file] [options] [new file]\n");
+	mprintf (" Opcoes : +arq    add file to library\n");
+	mprintf ("          -mod    remove file from library\n");
+	mprintf ("          -+mod   replace module by file mod.rel\n");
+	mprintf ("          *mod    copy the module contents into file mod.rel\n");
+	mprintf ("          -*mod   remove module and copy it into mod.rel\n");
 	}
 
 /*****************************************************************************
@@ -416,13 +416,13 @@ void nome_mod (int arq1, int arq2)
 		{
 		if (mod_cont >= max_mod)
 			{
-			mprintf ("ERRO FATAL: numero maximo de modulos excedido.\n");
+			mprintf ("FATAL ERROR: the maximum numer of modules was exceeded.\n");
 			termina (1);
 			}
 		if (!ignora_simbolo)
 			{
 			if (simbolo -> atrib & MODULO)
-				mprintf ("AVISO: modulo %s redefinido.\n", simbolo -> nome);
+				mprintf ("WARNING: module %s was redefined.\n", simbolo -> nome);
 			simbolo -> atrib |= MODULO;	/* indica se tratar de um modulo */
 			strcpy (modulo [mod_cont++].nome , simbolo -> nome);
 			}
@@ -452,7 +452,7 @@ void entry_symbols (int arq1, int arq2)
 		if (simbolo -> atrib & PUBLICO)
 			{
 			if (!ignora_simbolo)
-				mprintf ("AVISO: simbolo %s definido em modulos %s e %s.\n", simbolo -> nome, modulo [mod_cont - 1].nome,
+				mprintf ("WARNING: symbol %s defined in modules %s and %s.\n", simbolo -> nome, modulo [mod_cont - 1].nome,
 				 modulo [simbolo -> modulo].nome);
 			}
 		else
@@ -554,7 +554,7 @@ void define_entry_point (int arq1, int arq2)
 		{
 		if (!ignora_simbolo)
 			if (!(simbolo -> atrib & PUBLICO))
-				mprintf ("AVISO: inconsistencia em simbolo publico no modulo %s.\n", modulo [mod_cont - 1].nome);
+				mprintf ("WARNING: public symbol inconsistency detected in module %s.\n", modulo [mod_cont - 1].nome);
 		manda_entry_point (simbolo -> nome, arq1, 0);
 		manda_entry_point (simbolo -> nome, arq2, 1);
 		}
@@ -609,7 +609,7 @@ int inicia (char *file)
 	{
 	if ((lib_file = open (file, O_BINARY | O_RDONLY)) == -1)
 		{
-		mprintf ("Falha de abertura de arquivo %s\n", str_maiuscula (file));
+		mprintf ("Failed to open file %s\n", str_maiuscula (file));
 		return 0;
 		}
 	voltou = 0;
@@ -1026,7 +1026,7 @@ int pega_bit (void)
 
 void erro_fatal (char *s)
 	{
-	mprintf ("ERRO FATAL: %s\n", s);
+	mprintf ("FATAL ERROR: %s\n", s);
 	termina (1);
 	}
 
@@ -1039,7 +1039,7 @@ void erro_fatal (char *s)
 
 void erro (void)
 	{
-	mprintf ("Arquivo invalido.\n");
+	mprintf ("Invalid file.\n");
 	}
 
 /*****************************************************************************
@@ -1104,7 +1104,7 @@ void manda_inf (void)
 			j = 18 - mprintf ("%s", modulo [i].nome);
 			while (j--)
 				putchar (' ');
-			mprintf ("Codigo: %xH      Dados: %xH", modulo [i].csize, modulo [i].dsize);
+			mprintf ("Code: %xH        Data: %xH", modulo [i].csize, modulo [i].dsize);
 			for (brancos = 2, par = 0, sn = 0; sn < ((nset_simb - 1) << nrot_aloc) + (nsimb_aloc - resta_simb); sn++)
 				if ((s = aloc_simb [(sn >> nrot_aloc) & c_mask_aloc] + (sn & mask_aloc)) -> atrib & PUBLICO && s -> modulo == i)
 					{
