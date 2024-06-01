@@ -5,18 +5,25 @@ What is this
 The story behind it
 ===================
 
-By the mid-80s I was hired to work as a developer to a small Brazilian company whose products were based on the 8085 processor. Our development system was basically a PC (a very old one -- the first was based on the 8088) to which we plugged a board called BabyBlue, in contrast to the Big Blue (IBM). The BabyBlue had a Z80 processor and was able to run CP/M, which was something like an 8-bit version of MS-DOS. The software we developed controlled a very demanding real time system, so everything was written in assembly. We assembled the software using a Digital Research package that had an assembler (RMAC), a linker (LINK-80), and a librarian (LIB-80). This package was very popular at the time.
+By the mid-80s I was hired to work as a developer to a small Brazilian company whose products were based on the 8085 processor. Our development system was basically a PC (very old ones -- the first was based on the 8088) to which we plugged a board called BabyBlue, in contrast to the Big Blue (IBM). The BabyBlue had a Z80 processor and was able to run CP/M, which was something like an 8-bit version of MS-DOS. The software we developed controlled a very demanding real time system, so everything was written in assembly. We assembled the software using a Digital Research package that had an assembler (RMAC), a linker (LINK-80), and a librarian (LIB-80). This package was very popular at the time.
 
-By around 1989 or 1990 we already used 80386-based PCs, which were way faster and more powerful than the first PCs we had few years prior. But that did not improve the assembly time, since it was performed on the BabyBlue. On the contrary, as the software grew in size, the assembly time only became lengthier and frustration mounted. I do not remember the exact time it took to assembly everything, but it should be something between 20 and 30 minutes.
+By around 1989 or 1990 we already used 80386-based PCs, which were way faster
+and more powerful than the first PCs we had few years prior. But that did not
+improve the assembly time much, since it was performed on the old BabyBlues. On the
+contrary, as the software grew in size, the assembly time only became lengthier
+and frustration mounted. I do not remember the exact time it took to assembly
+everything, but it should be something between 20 and 30 minutes.
 
 By around this time I went back to college in order to study towards my master's degree. One of the courses was about compilers and I enjoyed the subject very much. In order to consolidate my knowledge and at the same time to improve the assembly performance, I decided to write an assembler that could replace the package that ran on the BabyBlue in my spare time.
 
-I began with the assembler. It needed to create files that had the same format as the ones created by RMAC, since I couldn't replace all the executables at once. I eventually ended up having success with the assembler and implemented the linker. I do not remember whether we used the librarian or not by that time. Perhaps implemented one because that was necessary for the work, perhaps I implemented one just because I already had implemented the assembler and the linker and I wanted to finish the whole package. In the end, I got the three of them, which I called A80, L80 and LB80.
-
-
-
-It needed to be compatible to RMAC because I couldn't replace everything at once. RMAC has an assembly, a linker and a librarian. I am not sure we used the librarian or not, but we did use the assembler and the linker.
-
+I began with the assembler. It needed to create files that had the same format
+as the ones created by RMAC, since my initial ideal was to keep using LINK-80 (I
+did not want to replace all the executables at once). I eventually ended up having success with the assembler and implemented
+the linker. I do not remember whether we used the librarian or not by that time.
+Perhaps I implemented one because that was necessary for the work, perhaps I
+implemented one just because I already had implemented the assembler and the
+linker and I wanted to have the whole package implemented. In the end, I got the three of
+them, which I called A80, L80 and LB80.
 
 
 
