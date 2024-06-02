@@ -330,7 +330,6 @@ void trata_chain_external (void)
 	char rel_d, rel_o;
 	unsigned int valor_d, valor_o;
 	unsigned char mask, *end_c;
-	unsigned int result;
 
 	while ((atomo = analex ()) == CHAIN_EXTERNAL)
 		{

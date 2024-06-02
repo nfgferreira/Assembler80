@@ -629,7 +629,7 @@ char *nomeok (char *n, char *ext)
 	int i, j;
 	static char nomeout [128];
 
-	if ((i = strlen (n)) >= sizeof nomeout)
+	if ((i = (int)strlen (n)) >= sizeof nomeout)
 		return NULL;
 	strcpy (nomeout, n);
 	for (j = i; n [j] != ':' && n [j] != '\\' && n [j] != '.' && j; j--);
@@ -793,6 +793,7 @@ int analex (void)
 	case 3:
 		return ERRO;
 		}
+	return ERRO;			// Just to make the compiler happy.
 	}
 
 /*****************************************************************************
@@ -1085,9 +1086,9 @@ void manda_inf (void)
 	{
 	int par = 0;
 	int brancos;
-	int i, j, k;
+	int i, j;
 	simb *s;
-	unsigned int sn;
+	int sn;
 
 	if (nset_simb)					/* so faz alguma coisa se existe simbolo */
 		{
@@ -1132,7 +1133,7 @@ void imprime_simbolo (simb *s, int par)
 	char buf [25];
 	int nnome, i;
 
-	nnome = strlen (s -> nome);
+	nnome = (int)strlen (s -> nome);
 	for (i = 0; i < nnome; i++)
 		buf [i] = s -> nome [i];
 	while (i < sizeof buf)
@@ -1301,7 +1302,7 @@ int cdecl mprintf (char *s, ...)
 
 				case 'x':
 					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 16);
-					pos_numero = 4 - strlen (aux);
+					pos_numero = 4 - (int)strlen (aux);
 					while (pos_numero--)
 						{
 						putchar ('0');
