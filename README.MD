@@ -1,6 +1,6 @@
-What is this
-============
+# What is this
 
+This is a assembler/linker/librarian package that is able to build and maintain 8080, 8085, Z80 and Z180 assembly code.
 
 # The story behind it
 
@@ -51,7 +51,6 @@ be a big problem because it can be replaced by IRP.
 8085, Z80 and Z180. The meumonics undestood by the program are the ones as
 defined by Intel, not Zilog. The instructions that are implemented by Z80 and
 Z180 but not by 8080/8085 are implemented using the following mneumonics:
-
 
 
 | A80 code                                      |	Z80/Z180(*) code                                |
@@ -140,14 +139,6 @@ Z180 but not by 8080/8085 are implemented using the following mneumonics:
 (*) Z180 exclusive instruction. All the others are Z80's too.
 (**) CPO, CPE, JPO, JPE, RPO, RPE can be used instead of those.
 
-
-
-
-
-
-
-Features
-=====
 
 Tests
 =====
