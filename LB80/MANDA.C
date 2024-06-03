@@ -247,8 +247,6 @@ void escreve (int handle, char *buffer, unsigned int count)
 
 void inicia_saida0 (void)
 	{
-	int i;
-
 	csaida0 = 0;
 	masksaida0 = 0x80;
 	}
@@ -262,8 +260,6 @@ void inicia_saida0 (void)
 
 void inicia_saida1 (void)
 	{
-	int i;
-
 	csaida1 = 0;
 	masksaida1 = 0x80;
 	}
@@ -356,7 +352,7 @@ void manda_n_n (char *nome, int cod, int arq, int saida)
 	manda (aloc, 2, arq, saida);
 	manda (valor, 8, arq, saida);
 	manda (valor >> 8, 8, arq, saida);
-	manda (strlen (nome), 3, arq, saida);
+	manda ((int)strlen (nome), 3, arq, saida);
 	for (i = 0; nome [i] != '\0'; i++)
 		manda (nome [i], 8, arq, saida);
 	}
@@ -375,7 +371,7 @@ void manda_n (char *nome, int cod, int arq, int saida)
 	manda_bit (1, arq, saida);
 	manda (special_link, 2, arq, saida);
 	manda (cod, 4, arq, saida);
-	manda (strlen (nome), 3, arq, saida);
+	manda ((int)strlen (nome), 3, arq, saida);
 	for (i = 0; nome [i] != '\0'; i++)
 		manda (nome [i], 8, arq, saida);
 	}
