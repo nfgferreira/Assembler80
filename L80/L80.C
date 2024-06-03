@@ -376,7 +376,7 @@ int cdecl mprintf (char *s, ...)
 
 				case 'x':
 					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 16);
-					pos_numero = 4 - strlen (aux);
+					pos_numero = 4 - (int)strlen (aux);
 					while (pos_numero--)
 						{
 						putchar ('0');
@@ -391,7 +391,7 @@ int cdecl mprintf (char *s, ...)
 
 				case 'X':
 					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 16);
-					pos_numero = 4 - strlen (aux);
+					pos_numero = 4 - (int)strlen (aux);
 					while (pos_numero--)
 						{
 						putchar ('0');
@@ -650,7 +650,7 @@ char *nomeok (char *n, char *ext)
 	int i, j;
 	static char nomeout [128];
 
-	if ((i = strlen (n)) >= sizeof nomeout)
+	if ((i = (int)strlen (n)) >= sizeof nomeout)
 		return NULL;
 	strcpy (nomeout, n);
 	for (j = i; n [j] != ':' && n [j] != '\\' && n [j] != '.' && j; j--);
@@ -680,7 +680,7 @@ char *poe_ext (char *n, char *ext)
 	int i, j;
 	static char nomeout [128];
 
-	if ((i = strlen (n)) >= sizeof nomeout)
+	if ((i = (int)strlen (n)) >= sizeof nomeout)
 		return NULL;
 	strcpy (nomeout, n);
 	for (j = i; n [j] != ':' && n [j] != '\\' && n [j] != '.' && j; j--);
@@ -916,7 +916,7 @@ char *combina (char *dest, char *org, char *ext)
 	if (dest == NULL)
 		return poe_ext (org, ext);
 
-	aux =  strlen (dest) - 1;
+	aux =  (int)strlen (dest) - 1;
 	if (dest [aux] == ':' || dest [aux] == '\\')
 		{								/*  caso acessando diretorio */
 		if ((caux = poe_ext (org, ext)) == NULL)
@@ -953,8 +953,8 @@ char *tira_path (char *org)
 	{
 	int i;
 
-	i = strlen (org);
-	while (i && org [i - 1] != '\\' & org [i - 1] != ':')
+	i = (int)strlen (org);
+	while (i && (org [i - 1] != '\\') && (org [i - 1] != ':'))
 		i--;
 	return org + i;
 	}
