@@ -45,7 +45,7 @@ char nome_rel [comp_max + 1];			/* nome do arquivo de saida */
 
 void cria_sym (char *n)
 	{
-	unsigned int sn;
+	int sn;
 	simb *s;
 
 	simb_linha = simb_col = sym_saida = 0;
@@ -192,7 +192,7 @@ void imprime_simbolo (simb *s)
 
 	num0 = num = ultoa ((unsigned long) v, n, 16);
 	while (*(++num0) != '\0');
-	for (i = 4 - (num0 - num); i; i--)
+	for (i = 4 - (int)(num0 - num); i; i--)
 		manda_car_sym ('0');
 	while (*num != '\0')
 		{
