@@ -14,7 +14,7 @@
 #define max_simb_aloc 32						/* numero maximo de unidades de tabela de simbolos alocaveis */
 #define nrot_aloc 10
 #define nsimb_aloc (1 << nrot_aloc)			/* numero de simbolos alocados por vez */
-#define c_mask_aloc ((1 << ((sizeof (int)) - nrot_aloc)) - 1)
+#define c_mask_aloc ((1 << ((sizeof (int)) * 8 - nrot_aloc)) - 1)
 #define mask_aloc (nsimb_aloc - 1)
 
 typedef struct simbl

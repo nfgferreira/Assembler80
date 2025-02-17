@@ -355,7 +355,7 @@ int cdecl mprintf (char *s, ...)
 					{
 				case 'u':
 				case 'i':
-					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 10);
+					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1LL << (8 * (sizeof (int)))) - 1), numero, 10);
 					pos_numero = 0;
 					while (*aux != '\0')
 						{
@@ -375,7 +375,7 @@ int cdecl mprintf (char *s, ...)
 					break;
 
 				case 'x':
-					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 16);
+					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1LL << (8 * (sizeof (int)))) - 1), numero, 16);
 					pos_numero = 4 - (int)strlen (aux);
 					while (pos_numero--)
 						{
@@ -390,7 +390,7 @@ int cdecl mprintf (char *s, ...)
 					break;
 
 				case 'X':
-					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 16);
+					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1LL << (8 * (sizeof (int)))) - 1), numero, 16);
 					pos_numero = 4 - (int)strlen (aux);
 					while (pos_numero--)
 						{

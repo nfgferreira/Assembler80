@@ -2550,7 +2550,7 @@ void get_par (char *p, int *np)
 					return;
 					}
 				devolve ();		/* devolve ',' ou '\n' */
-				ns = ultoa (((unsigned long) pilha [0].valor) & ((1L << (8 * (sizeof (int)))) - 1), numero, 10);
+				ns = ultoa (((unsigned long) pilha [0].valor) & ((1LL << (8 * (sizeof (int)))) - 1), numero, 10);
 				pos_numero = 0;
 				while (*ns != '\0')
 					{

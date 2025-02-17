@@ -1527,7 +1527,7 @@ void cdecl mprintf (char *s, ...)
 					{
 				case 'u':
 				case 'i':
-					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1L << (8 * (sizeof (int)))) - 1), numero, 10);
+					aux = ultoa (((unsigned long) va_arg (arg, int)) & ((1LL << (8 * (sizeof (int)))) - 1), numero, 10);
 					pos_numero = 0;
 					while (*aux != '\0')
 						{
