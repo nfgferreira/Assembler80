@@ -5,9 +5,21 @@
 
 /********************* variaveis exclusivas de expr ************************/
 
-jmp_buf sys_pilha;						/* endereco de retorno caso erro em exp. */
-int nivel;									/* nivel de parenteses */
-int parsing;								/* indica se apenas fazendo parsing de expressao */
+static jmp_buf sys_pilha;						/* endereco de retorno caso erro em exp. */
+static int nivel;									/* nivel de parenteses */
+static int parsing;								/* indica se apenas fazendo parsing de expressao */
+
+// Other variables
+unsigned int valor;						/* valor do numero retornado pelo analex */
+int ppilha;									/* ponteiro de pilha de expressoes */
+number pilha [comp_pilha];				/* pilha de expressoes */
+
+// Externals
+extern char string [81];							/* string retornada pelo analisador lexico */
+extern simb *simbolo;								/* ponteiro para simbolo retornado por analex */
+extern int causa;									/* motivo do erro no analisador lexico */
+extern unsigned int pc;							/* program counter */
+extern char alocatual;							/* tipo de alocacao atual: aseg, cseg ou dseg */
 
 #ifndef bottom_up
 
@@ -1670,4 +1682,3 @@ int low (void)
 
 #endif			/* bottom_up */
 
-

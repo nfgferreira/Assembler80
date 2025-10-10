@@ -1,15 +1,36 @@
 #include <stdio.h>
-#include <process.h>
+#include <ctype.h> // For tolower()
+//#include <process.h>
 #include <stdlib.h>
-#include <io.h>
-#include <dos.h>
+//#include <io.h>
+//#include <dos.h>
 #include <setjmp.h>
 #include <string.h>
+#include <glob.h>
 #include "variaveis.h"
 #include "protos.h"
-#include <sys\stat.h>
+#include <sys/stat.h>
 
-void cdecl main (int argc, char *argv[])
+int locais;									/* numero de locais ja colocados */
+int faz_simbolo;								/* pedida ou nao listagem de simbolos */
+char nmarq [50];							/* nome do arquivo passado por main */
+unsigned char cpu;						/* tipo de cpu */
+int definiu_saida;						/* se nome do arquivo de saida definido */
+int definiu_sym;							/* se nome do arquivo de simbolos definido */
+char nome_saida [50];					/* nome do arquivo de saida */
+char nome_sym [50];						/* nome do arquivo de simbolos */
+char nome_arq_rel [128];				/* nome do arquivo .rel de saida */
+char nome_arq_sym [128];				/* nome do arquivo .sym de saida */
+char *inc_path;							/* ponteiro para paths de arquivos include */
+int monta_pch;								/* manda montar pre-compiled header */
+int usa_pch;								/* manda usar pre-compiled header */
+
+/********************* variaveis exclusivas de main *************************/
+
+char argv_aux [128];
+char *__argv [128];
+
+void main (int argc, char *argv[])
 	{
 	int i, npar;
 	char *env, caux;
@@ -139,26 +160,27 @@ void a80 (int argc, char *argv[])
 				monta_pch = 1;
 			else
 				{
-				mprintf ("Invalid parameter: %s\n", argv [i]);
-				exit (1);
+					mprintf ("Invalid parameter: %s\n", argv [i]);
+					exit (1);
 				}
 		else
 		{
-			struct _finddata_t c_file;
-   			intptr_t hFile;
+		  	glob_t result;
+        int ret;
 
-			if ((hFile = _findfirst (argv [i], &c_file)) == -1)
-				{
-				mprintf ("Did not find file %s\n", argv [i]);
-				retorno = 1;
+  	    // Search for all files requested
+    	  ret = glob(argv [i], 0, NULL, &result);
+
+	    	if (ret != 0)
+  			{
+	  				mprintf ("Did not find file %s\n", argv [i]);
+				  	retorno = 1;
 				}
-			else
-			{
-				do
-					{
-					if (monta_nome (argv [i], c_file.name))
+
+      	for (size_t j = 0; i < result.gl_pathc; j++) {
+					if (monta_nome (argv [i], result.gl_pathv[j]))
 						{
-						mprintf ("%s\n", c_file.name);
+						mprintf ("%s\n", result.gl_pathv[j]);
 						switch (monta_destinos (nmarq))
 							{
 						case 0:									/* ok */
@@ -187,13 +209,60 @@ void a80 (int argc, char *argv[])
 						mprintf ("Name is too long: %s\n", argv [i]);
 						exit (1);
 						}
-					}
-				while (_findnext (hFile, &c_file) == 0);
-				_findclose( hFile );
-			}
-		}
+				}
+        globfree(&result);
+     	}
+
+
+//			struct _finddata_t c_file;
+// 			intptr_t hFile;
+//
+//			if ((hFile = _findfirst (argv [i], &c_file)) == -1)
+//				{
+//				mprintf ("Did not find file %s\n", argv [i]);
+//				retorno = 1;
+//				}
+//			else
+//			{
+//				do
+//					{
+//					if (monta_nome (argv [i], c_file.name))
+//						{
+//						mprintf ("%s\n", c_file.name);
+//						switch (monta_destinos (nmarq))
+//							{
+//						case 0:									/* ok */
+//							if (compila (nmarq))				/* erro de compilacao */
+//								{
+//								remove (nome_arq_rel);		/* apaga .rel */
+//								if (faz_simbolo)
+//									remove (nome_arq_sym);	/* apaga .sym, se existe */
+//								retorno = 1;
+//								}
+//							break;
+//
+//						case 1:									/* pau no arquivo de simbolos */
+//							mprintf ("Symbol file name is too long. The program was not assembled.\n");
+//							retorno = 1;
+//							break;
+//
+//						case 2:
+//							mprintf ("Output file name is too long. The program was not assembled.\n");
+//							retorno = 1;
+//							break;
+//							}
+//						}
+//					else
+//						{
+//						mprintf ("Name is too long: %s\n", argv [i]);
+//						exit (1);
+//						}
+//					}
+//				while (_findnext (hFile, &c_file) == 0);
+//				_findclose( hFile );
+//			}
 	exit (retorno);
-	}
+		}
 
 int monta_nome (char *s1, char *s2)
 	{
@@ -399,4 +468,19 @@ char *poe_ext (char *n, char *ext)
 	return nomeout;
 	}
 
-
+int stricmp(const char *s1, const char *s2) {
+    while (*s1 && *s2) {
+        // Convert characters to lowercase for case-insensitive comparison
+        unsigned char c1 = tolower((unsigned char)*s1);
+        unsigned char c2 = tolower((unsigned char)*s2);
+
+        if (c1 != c2) {
+            return (int)c1 - (int)c2; // Return difference if characters differ
+        }
+        s1++;
+        s2++;
+    }
+
+    // Handle cases where one string is a prefix of the other, or both end simultaneously
+    return (int)tolower((unsigned char)*s1) - (int)tolower((unsigned char)*s2);
+}

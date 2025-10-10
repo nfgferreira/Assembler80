@@ -1,5 +1,6 @@
 /* main.c */
-void cdecl main (int argc, char *argv[]);
+void main (int argc, char *argv[]);
+int stricmp(const char *s1, const char *s2);
 void a80 (int argc, char *argv[]);
 int monta_nome (char *s1, char *s2);
 void explica (void);
@@ -33,10 +34,12 @@ void hexa (char *s, int n);
 /* 1.30 char get_car (void);*/
 void devolve (void);
 void volta_atomo (t_atomo atomo);
+char *strupr(char *str);
 void inic_lex (char *nome);
 void salva_lex (void);
 void rec_lex (void);
-void cdecl mprintf (char *s, ...);
+char *ultoa(unsigned long value, char *buffer, int radix);
+void mprintf (char *s, ...);
 char le_car (void);					/* 1.30 */
 void final_de_linha (void);		/* 1.30 */
 
@@ -179,5 +182,3 @@ void exp_s_byte (void);
 void exp_1_byte (void);
 int expande_rot (int oc);
 int expande_shift (t_atomo atomo, int oc);
-
-

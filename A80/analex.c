@@ -1,7 +1,11 @@
+//#include <atomic>
 #include <ctype.h>
 #include <fcntl.h>
-#include <io.h>
+//#include <io.h>
+#include <stdint.h>
+#include <limits.h>
 #include <string.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <malloc.h>
 #include <stdarg.h>
@@ -14,6 +18,80 @@
 #define isvalid(c) ((c) == '?' || (c) == '_' || (c) == '#')
 
 char *falha_de_abertura = "FAILED TO OPEN FILE %s\n";
+
+/********************* variaveis exclusivas de analex ***********************/
+
+static int voltou_atomo;
+static t_atomo atomo_devolvido;
+static int le_cont;								/* ponteiro para buffer_leitura */
+static int num_car;								/* numero de caracteres no buffer de leitura */
+static t_atomo *tab_ats [max_aloc];			/* guarda atomos para passo 2 */
+static int atomos2_colocados;
+static int n2aloc;
+static int fim_da_linha_falso;
+static int pguard;
+static char buf_leit [132];			/* buffer de leitura da linha */
+static char linha_macro [256 + sizeof buf_leit];		/* linha de macro expandida */
+static int entra;
+static int prox_car;						/* proximo caracter da linha */
+static int passo_1;								/* indica passo 1 */
+static int sarq;
+static int snum_car;
+static int sle_cont;
+static int svoltou_atomo;
+static int sconverte;
+static t_atomo satomo_devolvido;
+static int spguard;
+static int sresta_car;
+static char *snext_linha;
+static int sprox_car;
+static char slinha_macro [sizeof linha_macro];
+static char buffer_leitura [4*1024];			/* buffer de leitura do analisador lexico */
+static char sbuffer_leitura [sizeof buffer_leitura];
+
+// Used also by other modules
+simb *simbolo;								/* ponteiro para simbolo retornado por analex */
+int causa;									/* motivo do erro no analisador lexico */
+int tratando_pch;							/* indicacao de tratamento de arquivo pch */
+int converte;								/* analex converte letras para maiusculas */
+simb *inic_simbolo [inic_simb_size];
+char *next_linha;							/* ponteiro para proxima linha */
+
+/****************** externals ****************************************/
+extern int ppmac;									/* maxima chamadas de macro simultaneas */
+extern unsigned int linha;						/* linha do arquivo fonte */
+extern int maclib;
+extern int expressao_em_parametro;
+extern int monta;									/* ordem para montar ou nao trecho atual */
+extern int definindo_macro;						/* esta lendo macro */
+extern unsigned int valor;						/* valor do numero retornado pelo analex */
+extern char string [81];							/* string retornada pelo analisador lexico */
+extern int atomos_colocados;					/* atomos salvos na atual alocacao */
+extern int naloc;									/* numero de unidades alocadas p/ guardar atomos */
+extern unsigned int nmem_aloc;
+extern unsigned char *tab_mem_aloc [max_mem_aloc];
+extern int nset_simb;
+extern simb *aloc_simb [max_simb_aloc];
+extern int nmcaloc;								/* numero de unidades usadas para alocar espaco para macros */
+extern char *tab_end_chars [max_char_aloc];	/* tabela de ponteiros para caracteres de macros */
+extern int arqrel;									/* arquivo de saida */
+extern int arq_sym;								/* arquivo de simbolos */
+extern int arq;										/* arquivo de entrada */
+extern int arq_pch;								/* arquivo pch */
+extern int despreza_linha;						/* faz analex ir mais rapido na primeira fase */
+extern int resta_car;								/* numero de caracteres que falta p/ ler linha atual */
+extern unsigned int mac_char;					/* ponteiro para lista dos caracteres das macros */
+extern unsigned char cpu;						/* tipo de cpu */
+extern int resta_simb;
+extern int mac_pp;									/* ponteiro para primeiro parametro da macro sendo expandida */
+extern int mac_np;									/* numero de parametros definidos na macro sendo expandida */
+extern char macro_par [max_macro_par];		/* nomes dos parametros e locais das macros */
+extern int nparm;									/* numero de parametros da macro sendo expandida */
+extern int exp_tipo_macro;						/* tipo de macro sendo expandida */
+extern unsigned int m_loops;					/* numero de irp, irpc e rept ja executados */
+extern char mpar [max_car_par];				/* buffer para parametros da macro sendo expandida */
+extern int mac_nl;									/* numero de locais definidos na macro sendo expandida */
+extern char nomes_locais [max_clocais];		/* buffer com nomes de labels locais da macro sendo expandida */
 
 /******************* tabela de palavras reservadas **************************/
 
@@ -1018,6 +1096,18 @@ void limpa_ts (void)
 		inic_simbolo [i] = NULL;
 	}
 
+unsigned int _rotr(unsigned int input, unsigned int count)
+{
+	unsigned int output = input;
+	
+	for (unsigned int i = 0; i < count; i++)
+	{
+		if (output & 1)
+			output = (output >> 1) |  (1 << (sizeof(unsigned int) * CHAR_BIT - 1));
+		else
+			output = (output >> 1);
+	}
+}
 /*****************************************************************************
 	ver_nome ():
 
@@ -1383,6 +1473,19 @@ void volta_atomo (t_atomo atomo)
 	voltou_atomo = 1;
 	}
 
+
+char *strupr(char *str) {
+    if (str == NULL) {
+        return NULL;
+    }
+    char *p = str;
+    while (*p) {
+        *p = toupper((unsigned char)*p);
+        p++;
+    }
+    return str;
+}
+
 /*****************************************************************************
 	inic_lex ()
 
@@ -1493,14 +1596,55 @@ void rec_lex (void)
 //nfgf 	return;
 //nfgf }
 
+
+char *ultoa(unsigned long value, char *buffer, int radix) {
+    // Handle invalid radix
+    if (radix < 2 || radix > 36) {
+        // You might choose to return NULL or handle this error differently
+        return NULL; 
+    }
+
+    char *ptr = buffer;
+    char *low = buffer;
+
+    // Handle the case of value being 0
+    if (value == 0) {
+        *ptr++ = '0';
+        *ptr = '\0';
+        return buffer;
+    }
+
+    // Convert digits in reverse order
+    while (value > 0) {
+        int digit = value % radix;
+        *ptr++ = (digit > 9) ? (digit - 10 + 'a') : (digit + '0');
+        value /= radix;
+    }
+
+    *ptr = '\0'; // Null-terminate the string
+
+    // Reverse the string
+    // This is a common way to reverse a string in-place
+    char *high = ptr - 1;
+    while (low < high) {
+        char temp = *low;
+        *low = *high;
+        *high = temp;
+        low++;
+        high--;
+    }
+
+    return buffer;
+}
+
 /*****************************************************************************
 	mprintf ()
 
 	Emula printf, so que muito menor.
 
-*****************************************************************************/
+/*****************************************************************************/
 
-void cdecl mprintf (char *s, ...)
+void mprintf (char *s, ...)
 	{
 	int escape, pos_numero;
 	char *aux, numero [(sizeof (long)) * 8 + 1];
@@ -1876,4 +2020,4 @@ void final_de_linha (void)
 			}
 	}
 
-
+

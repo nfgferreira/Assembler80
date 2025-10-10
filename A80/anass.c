@@ -1,33 +1,109 @@
 #include <fcntl.h>
-#include <io.h>
-#include <dos.h>
+//#include <io.h>
+//#include <dos.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
 #include <string.h>
-#include <sys\types.h>
-#include <sys\stat.h>
+//#include <sys\types.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include "variaveis.h"
 #include "protos.h"
 
 /********************* variaveis exclusivas de anass ***********************/
 
-unsigned int linha_atual;
-char mac_arq [sizeof (string)];
-unsigned int clocais;			/* numero de caracteres das variaveis locais */
-unsigned int local_atual;		/* numero de nomes locais processados */
-jmp_buf jmp_erro;
-int if_maclib;					/* nivel de pilha de if's na entrada de maclib */
-jmp_buf finaliza;				/* endereco de retorno p/ final de montagem */
-int np_irp;						/* numero de parametros de macro tipo irp */
-char par_irp [max_car_par];	/* parametros de macro tipo irp */
-unsigned int n_rept;			/* numero de repeticoes de macro tipo rept */
-unsigned int nn_rept;
-int tipo_macro;					/* tipo de macro sendo definida: 0 = macro normal
+char string [81];							/* string retornada pelo analisador lexico */
+extern char nmarq [50];							/* nome do arquivo passado por main */
+
+static unsigned int linha_atual;
+static char mac_arq [sizeof (string)];
+static unsigned int clocais;			/* numero de caracteres das variaveis locais */
+static unsigned int local_atual;		/* numero de nomes locais processados */
+static jmp_buf jmp_erro;
+static int if_maclib;					/* nivel de pilha de if's na entrada de maclib */
+static jmp_buf finaliza;				/* endereco de retorno p/ final de montagem */
+static int np_irp;						/* numero de parametros de macro tipo irp */
+static char par_irp [max_car_par];	/* parametros de macro tipo irp */
+static unsigned int n_rept;			/* numero de repeticoes de macro tipo rept */
+static unsigned int nn_rept;
+static int tipo_macro;					/* tipo de macro sendo definida: 0 = macro normal
   																 1 = irp
   																 2 = rept		*/
+static macro_desc *pmacro;						/* ponteiro para macro sendo guardada */
+static int if_counter;							/* contador de ifs */
+static int if_stack [if_size];					/* pilha de ifs */
+static unsigned int iec;							/* indice de extrn_chain */
+static unsigned int mchar;						/* ponteiro para caracteres de macro */
+static char nome_arq [sizeof (nmarq)];
+static macro_desc mfila [max_macro];			/* fila de macros */
+static mac_save mac_pilha [max_mac_call];	/* pilha para chamadas consecutivas de macro */
+static int num_pch;								/* usado na leitura de arquivo pch */
+static unsigned char buffer_pch [1024];		/* buffer de leitura de arquivo pch */
+static int le_pch;									/* usado na leitura de arquivo pch */
 
 #define bytmem(byte) (coloca_byte (byte, pmem))
+
+// Other variables
+int maclib;
+int expressao_em_parametro;
+int monta;									/* ordem para montar ou nao trecho atual */
+int definindo_macro;						/* esta lendo macro */
+int atomos_colocados;					/* atomos salvos na atual alocacao */
+int naloc;									/* numero de unidades alocadas p/ guardar atomos */
+unsigned int nmem_aloc;
+unsigned char *tab_mem_aloc [max_mem_aloc];
+int nset_simb;
+simb *aloc_simb [max_simb_aloc];
+int nmcaloc;								/* numero de unidades usadas para alocar espaco para macros */
+char *tab_end_chars [max_char_aloc];	/* tabela de ponteiros para caracteres de macros */
+int arqrel;									/* arquivo de saida */
+int arq_sym;								/* arquivo de simbolos */
+int arq;										/* arquivo de entrada */
+int arq_pch;								/* arquivo pch */
+int despreza_linha;						/* faz analex ir mais rapido na primeira fase */
+int resta_car;								/* numero de caracteres que falta p/ ler linha atual */
+unsigned int mac_char;					/* ponteiro para lista dos caracteres das macros */
+int resta_simb;
+int mac_pp;									/* ponteiro para primeiro parametro da macro sendo expandida */
+int mac_np;									/* numero de parametros definidos na macro sendo expandida */
+char macro_par [max_macro_par];		/* nomes dos parametros e locais das macros */
+unsigned int catual;						/* ponteiro para macro_par */
+int nparm;									/* numero de parametros da macro sendo expandida */
+int exp_tipo_macro;						/* tipo de macro sendo expandida */
+unsigned int m_loops;					/* numero de irp, irpc e rept ja executados */
+char mpar [max_car_par];				/* buffer para parametros da macro sendo expandida */
+int mac_nl;									/* numero de locais definidos na macro sendo expandida */
+char nomes_locais [max_clocais];		/* buffer com nomes de labels locais da macro sendo expandida */
+int erros;									/* numero de erros no programa */
+int ppmac;									/* maxima chamadas de macro simultaneas */
+unsigned int linha;						/* linha do arquivo fonte */
+unsigned int pc;							/* program counter */
+char alocatual;							/* tipo de alocacao atual: aseg, cseg ou dseg */
+ext extrn_chain [400];					/* ultima chamada de simbolos externos */
+unsigned int pmem;						/* ponteiro para mem */
+simb *mod_name;							/* simbolo que contem nome do modulo dado por NAME */
+unsigned int pcabs;						/* program counter */
+unsigned int pccod;						/* program counter */
+unsigned int pcdata;						/* program counter */
+int passo_1;								/* indica passo 1 */
+
+// External variables
+extern unsigned int valor;						/* valor do numero retornado pelo analex */
+extern simb *simbolo;								/* ponteiro para simbolo retornado por analex */
+extern int tratando_pch;							/* indicacao de tratamento de arquivo pch */
+extern int converte;								/* analex converte letras para maiusculas */
+extern unsigned char cpu;						/* tipo de cpu */
+extern char *next_linha;							/* ponteiro para proxima linha */
+extern int monta_pch;								/* manda montar pre-compiled header */
+extern int faz_simbolo;								/* pedida ou nao listagem de simbolos */
+extern int ppilha;									/* ponteiro de pilha de expressoes */
+extern number pilha [comp_pilha];				/* pilha de expressoes */
+extern int causa;									/* motivo do erro no analisador lexico */
+extern int usa_pch;								/* manda usar pre-compiled header */
+extern char *inc_path;							/* ponteiro para paths de arquivos include */
+extern int csaida;					/* ponteiro do buffer */
+extern char saida [1024 * 2];		/* buffer de saida */
 
 // Numbers match tipo_erros definitions in VARIAVEIS.H. 
 static char *erro_tab[] =
@@ -3187,4 +3263,4 @@ void w_word (unsigned int word)
 	w_byte ((unsigned char) (word >> 8));
 	}
 
-
+

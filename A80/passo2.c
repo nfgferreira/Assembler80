@@ -1,7 +1,8 @@
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <io.h>
+#include <unistd.h>
+#include <sys/fcntl.h>
+#include <sys/stat.h>
+//#include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
@@ -25,6 +26,43 @@ extern char *falha_de_abertura;
 #define define_program_size 13
 #define end_module 14
 #define snome(i) ((aloc_simb [((i) >> nrot_aloc) & c_mask_aloc] + ((i) & mask_aloc)) -> nome)
+
+/********************* variaveis exclusivas de passo2 ***********************/
+
+static char nome_rel [8];			/* nome do arquivo de saida */
+static unsigned int masksaida;	/* mascara do bit atual de saida */
+static int pula_linha;
+static char buf_sym [2048];		/* buffer para arquivo de simbolos */
+static int simb_linha, simb_col, sym_saida;	/* variaveis p/ construcao de arquivo de simbolos */
+
+// Externals
+extern unsigned char *tab_mem_aloc [max_mem_aloc];
+extern int nset_simb;
+extern simb *aloc_simb [max_simb_aloc];
+extern int arqrel;									/* arquivo de saida */
+extern int arq_sym;								/* arquivo de simbolos */
+extern simb *inic_simbolo [inic_simb_size];
+extern int erros;									/* numero de erros no programa */
+extern number pilha [comp_pilha];				/* pilha de expressoes */
+extern int ppilha;									/* ponteiro de pilha de expressoes */
+extern int causa;									/* motivo do erro no analisador lexico */
+extern char alocatual;							/* tipo de alocacao atual: aseg, cseg ou dseg */
+extern ext extrn_chain [400];					/* ultima chamada de simbolos externos */
+extern unsigned int pmem;						/* ponteiro para mem */
+extern simb *mod_name;							/* simbolo que contem nome do modulo dado por NAME */
+extern simb *simbolo;								/* ponteiro para simbolo retornado por analex */
+extern unsigned int pcabs;						/* program counter */
+extern unsigned int pccod;						/* program counter */
+extern unsigned int pcdata;						/* program counter */
+extern unsigned int pc;							/* program counter */
+extern unsigned int valor;						/* valor do numero retornado pelo analex */
+extern char string [81];							/* string retornada pelo analisador lexico */
+extern char nome_arq_rel [128];				/* nome do arquivo .rel de saida */
+extern char nome_arq_sym [128];				/* nome do arquivo .sym de saida */
+extern int resta_simb;
+
+int csaida;					/* ponteiro do buffer */
+char saida [1024 * 2];		/* buffer de saida */
 
 void passo2 ()
 	{
@@ -1284,4 +1322,4 @@ int expande_shift (t_atomo atomo, int oc)
 	return 2;
 	}
 
-
+
