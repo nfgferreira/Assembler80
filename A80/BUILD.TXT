@@ -1,0 +1,14 @@
+To build debug version:
+
+mkdir debug
+cd debug
+cmake -DCMAKE_BUILD_TYPE=Debug ../CMakeLists.txt
+make
+
+To build the release version:
+
+mkdir release
+cd release
+cmake -DCMAKE_BUILD_TYPE=Release ../CMakeLists.txt
+make
+

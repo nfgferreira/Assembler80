@@ -177,7 +177,7 @@ void a80 (int argc, char *argv[])
 				  	retorno = 1;
 				}
 
-      	for (size_t j = 0; i < result.gl_pathc; j++) {
+      	for (size_t j = 0; j < result.gl_pathc; j++) {
 					if (monta_nome (argv [i], result.gl_pathv[j]))
 						{
 						mprintf ("%s\n", result.gl_pathv[j]);

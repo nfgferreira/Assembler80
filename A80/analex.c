@@ -34,7 +34,6 @@ static char buf_leit [132];			/* buffer de leitura da linha */
 static char linha_macro [256 + sizeof buf_leit];		/* linha de macro expandida */
 static int entra;
 static int prox_car;						/* proximo caracter da linha */
-static int passo_1;								/* indica passo 1 */
 static int sarq;
 static int snum_car;
 static int sle_cont;
@@ -92,6 +91,7 @@ extern unsigned int m_loops;					/* numero de irp, irpc e rept ja executados */
 extern char mpar [max_car_par];				/* buffer para parametros da macro sendo expandida */
 extern int mac_nl;									/* numero de locais definidos na macro sendo expandida */
 extern char nomes_locais [max_clocais];		/* buffer com nomes de labels locais da macro sendo expandida */
+extern int passo_1;								/* indica passo 1 */
 
 /******************* tabela de palavras reservadas **************************/
 
