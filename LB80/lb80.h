@@ -109,37 +109,3 @@ void manda_n_n (char *nome, int cod, int arq, int saida);
 void manda_n (char *nome, int cod, int arq, int saida);
 void manda_at_numero (int cod, int aloc, unsigned int valor, int arq, int saida);
 
-/************************** VARIAVEIS GLOBAIS *******************************/
-
-int sfalta;
-int lib_file, slib_file;
-int devolvido;
-int sdevolvido;
-unsigned int valor;
-char bl [4096];
-char sbl [sizeof bl];
-int byte;
-int svoltou;
-int mask;
-int smask;
-int leit;
-int sleit;
-int rel;
-simb *inic_simbolo [inic_simb_size];
-simb *simbolo;
-int mod_cont;
-struct
-	{
-	char nome [comp_max + 1];
-	unsigned int dsize;
-	unsigned int csize;
-	} modulo [max_mod];
-simb *aloc_simb [max_simb_aloc];
-char saida0 [1024 * 4];		/* buffer de saida */
-int csaida0;					/* ponteiro do buffer */
-unsigned int masksaida0;	/* mascara do bit atual de saida */
-char saida1 [1024 * 4];		/* buffer de saida */
-int csaida1;					/* ponteiro do buffer */
-unsigned int masksaida1;	/* mascara do bit atual de saida */
-
-

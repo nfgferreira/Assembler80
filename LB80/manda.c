@@ -20,7 +20,20 @@
 #define define_program_size 13
 #define end_module 14
 
-char cpbuf [4096];		/* buffer usado para copiar uma rotina na outra */
+// External variables
+extern int rel;
+extern int byte;
+extern unsigned int valor;
+
+// Static variables
+static char cpbuf [4096];		/* buffer usado para copiar uma rotina na outra */
+static unsigned int masksaida0;	/* mascara do bit atual de saida */
+static unsigned int masksaida1;	/* mascara do bit atual de saida */
+static char saida0 [1024 * 4];		/* buffer de saida */
+static int csaida0;					/* ponteiro do buffer */
+static char saida1 [1024 * 4];		/* buffer de saida */
+static int csaida1;					/* ponteiro do buffer */
+
 
 /*****************************************************************************
 	manda_nome ()

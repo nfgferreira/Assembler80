@@ -10,7 +10,34 @@
 #include <string.h>
 #include "lb80.h"
 
-/* variaveis globais inicializadas */
+/* variaveis globais */
+int rel;
+int byte;
+unsigned int valor;
+
+// Static variables
+static int sfalta;
+static int lib_file, slib_file;
+static int devolvido;
+static int sdevolvido;
+static char bl [4096];
+static char sbl [sizeof bl];
+static int svoltou;
+static int mask;
+static int smask;
+static int leit;
+static int sleit;
+static simb *inic_simbolo [inic_simb_size];
+static simb *simbolo;
+static int mod_cont;
+struct
+	{
+	char nome [comp_max + 1];
+	unsigned int dsize;
+	unsigned int csize;
+	} modulo [max_mod];
+static simb *aloc_simb [max_simb_aloc];
+
 int falta = 0;
 int voltou = 0;
 int resta_simb = 0;
@@ -157,7 +184,8 @@ void edita (int npar, char *par [])
 			}
 		}
 
-	if ((arqout = open (temp = mktemp (temp), O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
+//	if ((arqout = open (temp = mktemp (temp), O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
+	if ((arqout = mkstemp("_LB80_")) == -1)
 		{
 		mprintf ("Failed to open temporary file.\n");
 		termina (1);
