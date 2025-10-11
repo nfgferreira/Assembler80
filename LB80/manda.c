@@ -1,8 +1,9 @@
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <io.h>
+//#include <sys\types.h>
+#include <sys/stat.h>
+//#include <io.h>
 #include <string.h>
+#include <unistd.h>
 #include "lb80.h"
 
 #define special_link 0
@@ -393,4 +394,4 @@ void manda_at_numero (int cod, int aloc, unsigned int valor, int arq, int saida)
 	manda (valor >> 8, 8, arq, saida);
 	}
 
-
+

@@ -1,7 +1,8 @@
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <io.h>
+//#include <sys\types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+//#include <io.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +20,10 @@ int ignora_simbolo = 0;
 char *_argv [256];
 char buf_prj [2048 + 1];
 
-void cdecl main (int argc, char *argv [])
+static int stricmp(const char *s1, const char *s2);
+static char *ultoa(unsigned long value, char *buffer, int radix);
+	
+void main (int argc, char *argv [])
 	{
 	int arq, tam_arq, _argc, i, i_aux, tem_parametro;
 	char *mensagem = "LB80: Gerenciador de bibliotecas - Versao 2.00\n";
@@ -1251,7 +1255,7 @@ void sort (long int n)
 
 *****************************************************************************/
 
-int cdecl mprintf (char *s, ...)
+int mprintf (char *s, ...)
 	{
 	int escape, pos_numero;
 	char *aux, numero [(sizeof (long)) * 8 + 1];
@@ -1410,4 +1414,60 @@ void limpa_ts (void)
 		inic_simbolo [i] = NULL;
 	}
 
-
+
+int stricmp(const char *s1, const char *s2) {
+    while (*s1 && *s2) {
+        // Convert characters to lowercase for case-insensitive comparison
+        unsigned char c1 = tolower((unsigned char)*s1);
+        unsigned char c2 = tolower((unsigned char)*s2);
+
+        if (c1 != c2) {
+            return (int)c1 - (int)c2; // Return difference if characters differ
+        }
+        s1++;
+        s2++;
+    }
+
+    // Handle cases where one string is a prefix of the other, or both end simultaneously
+    return (int)tolower((unsigned char)*s1) - (int)tolower((unsigned char)*s2);
+}
+
+char *ultoa(unsigned long value, char *buffer, int radix) {
+    // Handle invalid radix
+    if (radix < 2 || radix > 36) {
+        // You might choose to return NULL or handle this error differently
+        return NULL; 
+    }
+
+    char *ptr = buffer;
+    char *low = buffer;
+
+    // Handle the case of value being 0
+    if (value == 0) {
+        *ptr++ = '0';
+        *ptr = '\0';
+        return buffer;
+    }
+
+    // Convert digits in reverse order
+    while (value > 0) {
+        int digit = value % radix;
+        *ptr++ = (digit > 9) ? (digit - 10 + 'a') : (digit + '0');
+        value /= radix;
+    }
+
+    *ptr = '\0'; // Null-terminate the string
+
+    // Reverse the string
+    // This is a common way to reverse a string in-place
+    char *high = ptr - 1;
+    while (low < high) {
+        char temp = *low;
+        *low = *high;
+        *high = temp;
+        low++;
+        high--;
+    }
+
+    return buffer;
+}

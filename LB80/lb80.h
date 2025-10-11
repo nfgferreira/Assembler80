@@ -12,6 +12,8 @@
 #define c_mask_aloc ((1 << ((sizeof (int)) * 8 - nrot_aloc)) - 1)
 #define nsimb_aloc (1 << nrot_aloc)				/* numero de simbolos alocados por vez */
 #define mask_aloc (nsimb_aloc - 1)
+#define O_BINARY 0
+#define O_TEXT 0
 
 typedef struct simbl
 	{
@@ -83,7 +85,7 @@ void manda_inf (void);
 void imprime_simbolo (simb *s, int par);
 void ordena_tab_sym (void);
 void sort (long int n);
-int cdecl mprintf (char *s, ...);
+int mprintf (char *s, ...);
 void limpa_ts (void);
 
 /* manda.c */
@@ -140,4 +142,4 @@ char saida1 [1024 * 4];		/* buffer de saida */
 int csaida1;					/* ponteiro do buffer */
 unsigned int masksaida1;	/* mascara do bit atual de saida */
 
-
+
