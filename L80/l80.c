@@ -2,10 +2,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <io.h>
-#include <dos.h>
+#include <unistd.h>
+//#include <sys\types.h>
+#include <sys/stat.h>
+//#include <io.h>
+//#include <dos.h>
 #include <setjmp.h>
 #include <string.h>
 #include <ctype.h>
@@ -14,12 +15,12 @@
 extern jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
 extern jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
 
-//nfgf char *__argv [256];
-char buf_prj [2048 + 1];
-char nome_arq_rel [128];						/* nome do arquivo .rel de saida */
-char nome_arq_sym [128];						/* nome do arquivo .sym de saida */
+static char *__argv [256];
+static char buf_prj [2048 + 1];
+static char nome_arq_rel [128];						/* nome do arquivo .rel de saida */
+static char nome_arq_sym [128];						/* nome do arquivo .sym de saida */
 
-void cdecl main (int argc, char *argv [])
+void main (int argc, char *argv [])
 	{
 	int arq, tam_arq, _argc, i, i_aux, tem_parametro;
 	char *mensagem = "L80: Linker - Versao 2.00\n";
@@ -325,7 +326,7 @@ void explica (void)
 
 *****************************************************************************/
 
-int cdecl mprintf (char *s, ...)
+int mprintf (char *s, ...)
 	{
 	int escape, pos_numero;
 	char *aux, numero [(sizeof (long)) * 8 + 1];
@@ -975,4 +976,4 @@ void apaga_arqs (char *nome, char *sym, char *rel)
 		remove (nome_arq_rel);
 	}
 
-
+

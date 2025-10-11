@@ -2,9 +2,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <io.h>
+#include <unistd.h>
+//#include <sys\types.h>
+//#include <sys\stat.h>
+//#include <io.h>
 #include <setjmp.h>
 #include <string.h>
 #include "l80.h"
@@ -377,4 +378,4 @@ void limpa_ts (void)
 		inic_simbolo [i] = NULL;
 	}
 
-
+

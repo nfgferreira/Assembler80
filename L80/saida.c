@@ -2,9 +2,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <io.h>
+#include <unistd.h>
+//#include <sys\types.h>
+#include <sys/stat.h>
+//#include <io.h>
 #include <setjmp.h>
 #include <string.h>
 #include "l80.h"
@@ -461,4 +462,42 @@ void manda (int num, int n)
 		}
 	}
 
-
+char *ultoa(unsigned long value, char *buffer, int radix) {
+    // Handle invalid radix
+    if (radix < 2 || radix > 36) {
+        // You might choose to return NULL or handle this error differently
+        return NULL; 
+    }
+
+    char *ptr = buffer;
+    char *low = buffer;
+
+    // Handle the case of value being 0
+    if (value == 0) {
+        *ptr++ = '0';
+        *ptr = '\0';
+        return buffer;
+    }
+
+    // Convert digits in reverse order
+    while (value > 0) {
+        int digit = value % radix;
+        *ptr++ = (digit > 9) ? (digit - 10 + 'a') : (digit + '0');
+        value /= radix;
+    }
+
+    *ptr = '\0'; // Null-terminate the string
+
+    // Reverse the string
+    // This is a common way to reverse a string in-place
+    char *high = ptr - 1;
+    while (low < high) {
+        char temp = *low;
+        *low = *high;
+        *high = temp;
+        low++;
+        high--;
+    }
+
+    return buffer;
+}

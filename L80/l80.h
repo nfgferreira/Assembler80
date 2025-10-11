@@ -16,6 +16,8 @@
 #define nsimb_aloc (1 << nrot_aloc)			/* numero de simbolos alocados por vez */
 #define c_mask_aloc ((1 << ((sizeof (int)) * 8 - nrot_aloc)) - 1)
 #define mask_aloc (nsimb_aloc - 1)
+#define O_BINARY 0
+#define O_TEXT 0
 
 typedef struct simbl
 	{
@@ -51,7 +53,7 @@ typedef enum
 /* l80.c */
 void faz_link (int argc, char *argv []);
 void explica (void);
-int cdecl mprintf (char *s, ...);
+int mprintf (char *s, ...);
 int pega_hex (char *p, int *n);
 void inicia_linc (void);
 int linca (char *arq);
@@ -69,6 +71,7 @@ int monta_destinos (char *nome, char *sym, char *rel);
 char *combina (char *dest, char *org, char *ext);
 char *tira_path (char *org);
 void apaga_arqs (char *nome, char *sym, char *rel);
+char *ultoa(unsigned long value, char *buffer, int radix);
 
 /* analex.c */
 void inicia_analex (void);
@@ -173,4 +176,4 @@ unsigned int catual, datual;					/* enderecos atuais dos segmentos */
 char *nome;											/* nome do arquivo sendo linkado */
 unsigned int areac, aread;						/* endereco da area de codigo e area de dados */
 
-
+
