@@ -13,10 +13,6 @@
 #include "l80.h"
 
 // static variables
-static unsigned int i_cseg;								/* indice de codigo para code */
-static unsigned int i_dseg;								/* idem para data */
-static unsigned char *cseg [num_part];				/* particao code */
-static unsigned char *dseg [num_part];				/* particao data */
 
 /* nos dois vetores abaixo, cada endereco gasta 2 bits, com as seguintes
  combinacoes:
@@ -25,27 +21,15 @@ static unsigned char *dseg [num_part];				/* particao data */
 	10 -> dseg
 	11 -> nao utilizado
 */
-static unsigned char modo_end_c [0x10000 / 4];	/* modo de enderecamento de code */
-static unsigned char modo_end_d [0x10000 / 4];	/* idem data */
+unsigned char modo_end_c [0x10000 / 4];	/* modo de enderecamento de code */
+unsigned char modo_end_d [0x10000 / 4];	/* idem data */
 unsigned int i_os;								/* indice de particoes de off-set */
-typedef struct {
-	char r_endereco;								/* alocacao do endereco onde somar o off-set */
-	unsigned int endereco;						/* endereco onde somar o off-set */
-	unsigned int os;								/* off-set */
-	} off_set;
 off_set *end_os [num_prt_os];
 
 static char *__argv [256];
 static char buf_prj [2048 + 1];
 static char nome_arq_rel [128];						/* nome do arquivo .rel de saida */
 static char nome_arq_sym [128];						/* nome do arquivo .sym de saida */
-static unsigned int catual, datual;					/* enderecos atuais dos segmentos */
-static char nome_modulo [comp_max + 1];				/* nome do modulo sendo linkado */
-static int simbolo_redefinido;							/* indica simbolo definido mais do que 1 vez */
-static unsigned int base_cseg;							/* endereco base do arquivo atual para cseg */
-static unsigned int base_dseg;							/* endereco base do arquivo atual para dseg */
-static char rel_atual;									/* particao (P ou D) atual de codigo */
-static char *nome;											/* nome do arquivo sendo linkado */
 
 // Common to more than one module
 int l_file;											/* arquivo sendo lincado */
@@ -60,6 +44,17 @@ char simbolo_analex [comp_max + 1];			/* nome do simbolo lido quando nao e' colo
 unsigned int areac, aread;						/* endereco da area de codigo e area de dados */
 jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
 jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
+char rel_atual;									/* particao (P ou D) atual de codigo */
+unsigned int catual, datual;					/* enderecos atuais dos segmentos */
+unsigned int i_cseg;								/* indice de codigo para code */
+unsigned int i_dseg;								/* idem para data */
+unsigned char *cseg [num_part];				/* particao code */
+unsigned char *dseg [num_part];				/* particao data */
+unsigned int base_cseg;							/* endereco base do arquivo atual para cseg */
+unsigned int base_dseg;							/* endereco base do arquivo atual para dseg */
+char *nome;											/* nome do arquivo sendo linkado */
+char nome_modulo [comp_max + 1];				/* nome do modulo sendo linkado */
+int simbolo_redefinido;							/* indica simbolo definido mais do que 1 vez */
 
 void main (int argc, char *argv [])
 	{

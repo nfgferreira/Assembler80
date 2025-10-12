@@ -30,6 +30,12 @@ typedef struct simbl
 	struct simbl *next_simbolo;
 	} simb;
 
+typedef struct {
+	char r_endereco;								/* alocacao do endereco onde somar o off-set */
+	unsigned int endereco;						/* endereco onde somar o off-set */
+	unsigned int os;								/* off-set */
+	} off_set;
+
 typedef enum
 	{
 	BYTE,
