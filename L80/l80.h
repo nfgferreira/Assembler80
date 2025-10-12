@@ -126,30 +126,5 @@ void manda_publics (void);
 void manda_bit (int bit);
 void manda (int num, int n);
 
-/************************** VARIAVEIS GLOBAIS *******************************/
-
-int falta;											/* numero de bytes que falta ler do buffer de leitura de arquivo */
-int devolvido;										/* atomo devolvido para analex */
-int byte;											/* valor retornado por analex no caso de BYTE */
-int mask;											/* mascara utilizada por analex para ler bits */
-int leit;											/* indica numero de bytes do buffer lidos por analex */
-simb *inic_simbolo [inic_simb_size];		/* ponteiros para tabela de simbolo */
-simb *simbolo;										/* ponteiro para simbolo retornado por analex */
-char bl [4096];									/* buffer de leitura de analex */
-int resta_simb;									/* numero de simbolos ainda possiveis de serem usados na tabela */
-int nset_simb;										/* numero de particoes de simbolo utilizadas */
-simb *aloc_simb [max_simb_aloc];				/* ponteiro para arrays alocadas para simbolos */
-int rel;												/* tipo de alocacao que e' o numero ('A', 'C' ou 'D') */
-unsigned int valor;								/* valor retornado por analex */
-int coloca_simbolo;								/* indica para analex que simbolo deve ser colocado se nao procurado */
-char rel_atual;									/* particao (P ou D) atual de codigo */
-unsigned int base_cseg;							/* endereco base do arquivo atual para cseg */
-unsigned int base_dseg;							/* endereco base do arquivo atual para dseg */
-char simbolo_analex [comp_max + 1];			/* nome do simbolo lido quando nao e' colocado na tabela de simbolos */
-char nome_modulo [comp_max + 1];				/* nome do modulo sendo linkado */
-int simbolo_redefinido;							/* indica simbolo definido mais do que 1 vez */
-unsigned int catual, datual;					/* enderecos atuais dos segmentos */
-char *nome;											/* nome do arquivo sendo linkado */
-unsigned int areac, aread;						/* endereco da area de codigo e area de dados */
 
 

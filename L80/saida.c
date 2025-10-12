@@ -25,7 +25,12 @@
 #define end_module 14
 #define snome(i) ((aloc_simb [(i >> nrot_aloc) & c_mask_aloc] + (i & mask_aloc)) -> nome)
 
-extern jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
+extern simb *inic_simbolo [inic_simb_size];		/* ponteiros para tabela de simbolo */
+extern int resta_simb;									/* numero de simbolos ainda possiveis de serem usados na tabela */
+extern int nset_simb;										/* numero de particoes de simbolo utilizadas */
+extern simb *aloc_simb [max_simb_aloc];				/* ponteiro para arrays alocadas para simbolos */
+extern unsigned int valor;								/* valor retornado por analex */
+extern unsigned int areac, aread;						/* endereco da area de codigo e area de dados */
 extern jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
 
 char buf_sym [2048];			/* buffer para arquivo de simbolos */

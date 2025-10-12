@@ -13,8 +13,23 @@
 static int l_file;											/* arquivo sendo lincado */
 static int voltou;											/* indica atomo voltado para analisador lexico */
 
-jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
-jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
+int falta;											/* numero de bytes que falta ler do buffer de leitura de arquivo */
+int devolvido;										/* atomo devolvido para analex */
+int byte;											/* valor retornado por analex no caso de BYTE */
+int mask;											/* mascara utilizada por analex para ler bits */
+int leit;											/* indica numero de bytes do buffer lidos por analex */
+simb *simbolo;										/* ponteiro para simbolo retornado por analex */
+char bl [4096];									/* buffer de leitura de analex */
+unsigned int valor;								/* valor retornado por analex */
+
+extern simb *inic_simbolo [inic_simb_size];		/* ponteiros para tabela de simbolo */
+extern int resta_simb;									/* numero de simbolos ainda possiveis de serem usados na tabela */
+extern int nset_simb;										/* numero de particoes de simbolo utilizadas */
+extern simb *aloc_simb [max_simb_aloc];				/* ponteiro para arrays alocadas para simbolos */
+extern int rel;												/* tipo de alocacao que e' o numero ('A', 'C' ou 'D') */
+extern int coloca_simbolo;								/* indica para analex que simbolo deve ser colocado se nao procurado */
+extern char simbolo_analex [comp_max + 1];			/* nome do simbolo lido quando nao e' colocado na tabela de simbolos */
+extern jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
 
 /*****************************************************************************
 	inicia_analex ()

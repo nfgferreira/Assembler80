@@ -12,9 +12,6 @@
 #include <ctype.h>
 #include "l80.h"
 
-extern jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
-extern jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
-
 // static variables
 static unsigned int i_cseg;								/* indice de codigo para code */
 static unsigned int i_dseg;								/* idem para data */
@@ -42,10 +39,27 @@ static char *__argv [256];
 static char buf_prj [2048 + 1];
 static char nome_arq_rel [128];						/* nome do arquivo .rel de saida */
 static char nome_arq_sym [128];						/* nome do arquivo .sym de saida */
+static unsigned int catual, datual;					/* enderecos atuais dos segmentos */
+static char nome_modulo [comp_max + 1];				/* nome do modulo sendo linkado */
+static int simbolo_redefinido;							/* indica simbolo definido mais do que 1 vez */
+static unsigned int base_cseg;							/* endereco base do arquivo atual para cseg */
+static unsigned int base_dseg;							/* endereco base do arquivo atual para dseg */
+static char rel_atual;									/* particao (P ou D) atual de codigo */
+static char *nome;											/* nome do arquivo sendo linkado */
 
 // Common to more than one module
 int l_file;											/* arquivo sendo lincado */
 int voltou;											/* indica atomo voltado para analisador lexico */
+simb *inic_simbolo [inic_simb_size];		/* ponteiros para tabela de simbolo */
+int resta_simb;									/* numero de simbolos ainda possiveis de serem usados na tabela */
+int nset_simb;										/* numero de particoes de simbolo utilizadas */
+simb *aloc_simb [max_simb_aloc];				/* ponteiro para arrays alocadas para simbolos */
+int rel;												/* tipo de alocacao que e' o numero ('A', 'C' ou 'D') */
+int coloca_simbolo;								/* indica para analex que simbolo deve ser colocado se nao procurado */
+char simbolo_analex [comp_max + 1];			/* nome do simbolo lido quando nao e' colocado na tabela de simbolos */
+unsigned int areac, aread;						/* endereco da area de codigo e area de dados */
+jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
+jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
 
 void main (int argc, char *argv [])
 	{
@@ -594,7 +608,7 @@ int linca (char *arq)
 
 	if ((l_file = open (nome = nomeok (arq, lib ? "lib" : "rel"), O_BINARY | O_RDONLY)) == -1)
 		{
-		mprintf ("FAILE TO OPEN FILE %s\nABORTING.\n", str_maiuscula (nome));
+		mprintf ("FAILED TO OPEN FILE %s\nABORTING.\n", str_maiuscula (nome));
 		return 1;
 		}
 
