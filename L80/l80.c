@@ -15,10 +15,37 @@
 extern jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
 extern jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
 
+// static variables
+static unsigned int i_cseg;								/* indice de codigo para code */
+static unsigned int i_dseg;								/* idem para data */
+static unsigned char *cseg [num_part];				/* particao code */
+static unsigned char *dseg [num_part];				/* particao data */
+
+/* nos dois vetores abaixo, cada endereco gasta 2 bits, com as seguintes
+ combinacoes:
+	00 -> absoluto
+	01 -> cseg
+	10 -> dseg
+	11 -> nao utilizado
+*/
+static unsigned char modo_end_c [0x10000 / 4];	/* modo de enderecamento de code */
+static unsigned char modo_end_d [0x10000 / 4];	/* idem data */
+unsigned int i_os;								/* indice de particoes de off-set */
+typedef struct {
+	char r_endereco;								/* alocacao do endereco onde somar o off-set */
+	unsigned int endereco;						/* endereco onde somar o off-set */
+	unsigned int os;								/* off-set */
+	} off_set;
+off_set *end_os [num_prt_os];
+
 static char *__argv [256];
 static char buf_prj [2048 + 1];
 static char nome_arq_rel [128];						/* nome do arquivo .rel de saida */
 static char nome_arq_sym [128];						/* nome do arquivo .sym de saida */
+
+// Common to more than one module
+int l_file;											/* arquivo sendo lincado */
+int voltou;											/* indica atomo voltado para analisador lexico */
 
 void main (int argc, char *argv [])
 	{

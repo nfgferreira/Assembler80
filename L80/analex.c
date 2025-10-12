@@ -10,6 +10,9 @@
 #include <string.h>
 #include "l80.h"
 
+static int l_file;											/* arquivo sendo lincado */
+static int voltou;											/* indica atomo voltado para analisador lexico */
+
 jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
 jmp_buf erro_tratamento2;						/* ponteiro para erro de tratamento apos analise sintatica/semantica */
 

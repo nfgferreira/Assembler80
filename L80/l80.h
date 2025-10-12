@@ -128,30 +128,6 @@ void manda (int num, int n);
 
 /************************** VARIAVEIS GLOBAIS *******************************/
 
-unsigned int i_cseg;								/* indice de codigo para code */
-unsigned int i_dseg;								/* idem para data */
-unsigned char *cseg [num_part];				/* particao code */
-unsigned char *dseg [num_part];				/* particao data */
-
-/* nos dois vetores abaixo, cada endereco gasta 2 bits, com as seguintes
- combinacoes:
-	00 -> absoluto
-	01 -> cseg
-	10 -> dseg
-	11 -> nao utilizado
-*/
-unsigned char modo_end_c [0x10000 / 4];	/* modo de enderecamento de code */
-unsigned char modo_end_d [0x10000 / 4];	/* idem data */
-
-unsigned int i_os;								/* indice de particoes de off-set */
-typedef struct {
-	char r_endereco;								/* alocacao do endereco onde somar o off-set */
-	unsigned int endereco;						/* endereco onde somar o off-set */
-	unsigned int os;								/* off-set */
-	} off_set;
-off_set *end_os [num_prt_os];
-int l_file;											/* arquivo sendo lincado */
-int voltou;											/* indica atomo voltado para analisador lexico */
 int falta;											/* numero de bytes que falta ler do buffer de leitura de arquivo */
 int devolvido;										/* atomo devolvido para analex */
 int byte;											/* valor retornado por analex no caso de BYTE */
