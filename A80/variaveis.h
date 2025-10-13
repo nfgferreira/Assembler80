@@ -1,3 +1,4 @@
+#define LINUX
 #define bottom_up						/* expressao bottom-up ou top-down */
 #define FAST_READ						/* arquivos de leitura tratados como binario, para tornar leitura + rapida */
 											/* assume-se que os finais de linha dos arquivos sempre sao 0xd 0xd */

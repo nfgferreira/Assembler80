@@ -1805,7 +1805,11 @@ char le_car (void)
 				paux0 = buffer_leitura + le_cont;	/* aponta para primeiro caracter a ser lido */
 				rest_buf = num_car;						/* numero de caracteres a pesquisar */
 				}
+#ifdef LINUX
+			if ((paux1 = memchr (paux0, '\n', rest_buf)) == NULL)	/* nao tem fim de linha no buffer */
+#else
 			if ((paux1 = memchr (paux0, ppmac ? '\n' : '\r', rest_buf)) == NULL)	/* nao tem fim de linha no buffer */
+#endif
 				if (rest_buf + resta_car >= sizeof buf_leit - 1)	/* vai ultrapassar: limita */
 					{
 					memcpy (buf_leit + resta_car, paux0, sizeof buf_leit - resta_car - 1);
