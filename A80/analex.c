@@ -1851,8 +1851,10 @@ char le_car (void)
 					le_cont += (int)(paux1 - paux0) + 1;
 					if (num_car -= (int)(paux1 - paux0) + 1)
 						{
+#ifndef LINUX
 						num_car--;							/* pula '\n' */
 						le_cont++;
+#endif
 						}
 					else
 						final_de_linha ();				/* vai ate' final de linha real */
