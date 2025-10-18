@@ -603,7 +603,7 @@ int linca (char *arq)
 
 	if ((l_file = open (nome = nomeok (arq, lib ? "lib" : "rel"), O_BINARY | O_RDONLY)) == -1)
 		{
-		mprintf ("FAILED TO OPEN FILE %s\nABORTING.\n", str_maiuscula (nome));
+		mprintf ("FAILED TO OPEN FILE %s\nABORTING.\n", nome);
 		return 1;
 		}
 

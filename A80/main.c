@@ -341,7 +341,7 @@ int monta_destinos (char *nome)
 		strcpy (nome_arq_sym, caux);
 		}
 
-	caux = combina (definiu_saida ? nome_saida : NULL, nome, monta_pch ? "PCH" : "REL");
+	caux = combina (definiu_saida ? nome_saida : NULL, nome, monta_pch ? "pch" : "rel");
 	if (caux == NULL || strlen (caux) >= sizeof nome_arq_rel)
 		return 2;
 	strcpy (nome_arq_rel, caux);
