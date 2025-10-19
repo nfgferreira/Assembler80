@@ -10,7 +10,6 @@
 #include <string.h>
 #include "l80.h"
 
-static int l_file;											/* arquivo sendo lincado */
 static int voltou;											/* indica atomo voltado para analisador lexico */
 
 int falta;											/* numero de bytes que falta ler do buffer de leitura de arquivo */
@@ -30,6 +29,7 @@ extern int rel;												/* tipo de alocacao que e' o numero ('A', 'C' ou 'D')
 extern int coloca_simbolo;								/* indica para analex que simbolo deve ser colocado se nao procurado */
 extern char simbolo_analex [comp_max + 1];			/* nome do simbolo lido quando nao e' colocado na tabela de simbolos */
 extern jmp_buf erro_tratamento;						/* ponteiro para erro de tratamento durante analise sintatica/semantica */
+extern int l_file;											/* arquivo sendo lincado */
 
 /*****************************************************************************
 	inicia_analex ()

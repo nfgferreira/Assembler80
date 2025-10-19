@@ -824,7 +824,7 @@ void inicia_saida (void)
 	{
 	csaida = 0;
 	masksaida = 0x80;
-	if ((arqrel = open (nome_arq_rel, O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
+	if ((arqrel = open (nome_arq_rel, O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IREAD | S_IWRITE)) == -1)
 		{
 		arqrel = 0;
 		mprintf (falha_de_abertura, strupr (nome_arq_rel));

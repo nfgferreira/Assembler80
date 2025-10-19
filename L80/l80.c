@@ -213,7 +213,7 @@ void faz_link (int argc, char *argv [])
 		exit (1);
 		}
 
-	if ((destino = open (n_dest = argv [i++], O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
+	if ((destino = open (n_dest = argv [i++], O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE | S_IREAD)) == -1)
 		{
 		mprintf ("Could not open destination file: %s\n", argv [i - 1]);
 		exit (1);
@@ -918,7 +918,7 @@ int monta_destinos (char *nome, char *sym, char *rel)
 
 	if (sym != NULL)
 		{
-		caux = combina (*sym != '\0' ? sym : NULL, nome, "SYM");
+		caux = combina (*sym != '\0' ? sym : NULL, nome, "sym");
 		if (caux == NULL || strlen (caux) >= sizeof nome_arq_sym)
 			return 1;
 		strcpy (nome_arq_sym, caux);
@@ -926,7 +926,7 @@ int monta_destinos (char *nome, char *sym, char *rel)
 
 	if (rel != NULL)
 		{
-		caux = combina (*rel != '\0' ? rel : NULL, nome, "REL");
+		caux = combina (*rel != '\0' ? rel : NULL, nome, "rel");
 		if (caux == NULL || strlen (caux) >= sizeof nome_arq_rel)
 			return 2;
 		strcpy (nome_arq_rel, caux);
