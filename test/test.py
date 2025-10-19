@@ -28,7 +28,7 @@ def assembly(include_path: str = "",
     out = sp.run()
     
 def test_all_8085_instructions():
-    print("*** Testing all 8085 instuctions.")
+    print("\n*** Testing all 8085 instuctions.")
 
     a80_path = program_directory + "/a80"
     source_path = source_directory + "/all8085.asm"
@@ -40,14 +40,34 @@ def test_all_8085_instructions():
         print("   " + line)
 
     if (out.returncode != 0):
-        print("   Returned {0}, 0 expected.", out.returncode)
+        print("   Returned {0}, 0 expected.".format(out.returncode))
         return False
 
     return True
         
+def test_no_sim_rim_in_8080():
+    print("\n*** Testing we do not have RIM and SIM in 8080.")
+
+    a80_path = program_directory + "/a80"
+    source_path = source_directory + "/all8085.asm"
+    
+    out=sp.run([a80_path, "-8080", source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
+
+    decoded_lines = out.stdout.decode('utf-8').splitlines()
+    for line in decoded_lines:
+        print("   " + line)
+
+    if (out.returncode != 0):
+        print("   Returned {0}, 0 expected.".format(out.returncode))
+        return False
+
+    return True
+
 def run_tests() -> int:
     count: int = 0    # Number of errors
 
+    if not test_no_sim_rim_in_8080():
+        count = count + 1
     if not test_all_8085_instructions():
         count = count + 1
     return count
