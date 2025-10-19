@@ -33,6 +33,7 @@ def test_all_8085_instructions():
     a80_path = program_directory + "/a80"
     source_path = source_directory + "/all8085.asm"
     
+    print ("   Calling {0} -8085 {1}\n".format(a80_path, source_path))
     out=sp.run([a80_path, "-8085", source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
 
     decoded_lines = out.stdout.decode('utf-8').splitlines()
@@ -51,14 +52,15 @@ def test_no_sim_rim_in_8080():
     a80_path = program_directory + "/a80"
     source_path = source_directory + "/all8085.asm"
     
+    print ("   Calling {0} -8080 {1}\n".format(a80_path, source_path))
     out=sp.run([a80_path, "-8080", source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
 
     decoded_lines = out.stdout.decode('utf-8').splitlines()
     for line in decoded_lines:
         print("   " + line)
 
-    if (out.returncode != 0):
-        print("   Returned {0}, 0 expected.".format(out.returncode))
+    if (out.returncode != 1):
+        print("   Returned {0}, 1 expected.".format(out.returncode))
         return False
 
     return True
