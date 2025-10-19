@@ -1,5 +1,6 @@
 import subprocess as sp
 import sys
+import os
 
 #out=s.run(["../A80/release/a80"], stdout=s.PIPE, stderr=s.STDOUT)
 #print (out.returncode)
@@ -16,7 +17,7 @@ import sys
 #print ("Now compiling. Showing stderr.")
 #print(out.stderr)
 
-program_directory: str = ""
+a80_directory: str = ""
 source_directory: str = ""
 
 def assembly(include_path: str = "",
@@ -30,10 +31,16 @@ def assembly(include_path: str = "",
 def test_all_8085_instructions():
     print("\n*** Testing all 8085 instuctions.")
 
-    a80_path = program_directory + "/a80"
+    a80_path = a80_directory + "/a80"
     source_path = source_directory + "/all8085.asm"
+
+    rel_file = os.path.basename(source_path)
+    rel_file,_ = os.path.splitext(rel_file)
+    rel_file = rel_file + ".rel"
+    if (os.path.exists(rel_file)):
+        os.remove(rel_file)
     
-    print ("   Calling {0} -8085 {1}\n".format(a80_path, source_path))
+    print ("\n   Calling {0} -8085 {1}\n".format(a80_path, source_path))
     out=sp.run([a80_path, "-8085", source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
 
     decoded_lines = out.stdout.decode('utf-8').splitlines()
@@ -44,12 +51,20 @@ def test_all_8085_instructions():
         print("   Returned {0}, 0 expected.".format(out.returncode))
         return False
 
+    l80_path = l80_directory + "/l80"
+    print ("   Calling {0} all8085.hex {1}\n".format(l80_path, rel_file))
+    out=sp.run([l80_path, "all8085.hex", rel_file], stdout=sp.PIPE, stderr=sp.STDOUT)
+
+    if (out.returncode != 0):
+        print("   Returned {0}, 0 expected.".format(out.returncode))
+        return False
+
     return True
         
 def test_no_sim_rim_in_8080():
     print("\n*** Testing we do not have RIM and SIM in 8080.")
 
-    a80_path = program_directory + "/a80"
+    a80_path = a80_directory + "/a80"
     source_path = source_directory + "/all8085.asm"
     
     print ("   Calling {0} -8080 {1}\n".format(a80_path, source_path))
@@ -75,14 +90,16 @@ def run_tests() -> int:
     return count
 
 def main(parameters: list[str]) -> None:
-    if len(parameters) < 3:
-        print("1st parameter: path for Assembler80 directory.")
-        print("2nd parameter: path for directory with source files to be tested.")
+    if len(parameters) < 4:
+        print("1st parameter: directory where the a80 executable is.")
+        print("2nd parameter: directory where the l80 executable is.")
+        print("3rd parameter: path for directory with source files to be tested.")
         exit(1)
 
-    global program_directory, source_directory
-    program_directory = parameters[1]
-    source_directory = parameters[2]
+    global a80_directory, l80_directory, source_directory
+    a80_directory = parameters[1]
+    l80_directory = parameters[2]
+    source_directory = parameters[3]
 
     count : int = run_tests()
     print("\n>>> Tests finished with {0} error(s)".format(count))
