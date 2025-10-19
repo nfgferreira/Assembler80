@@ -56,7 +56,7 @@ void cria_sym (char *n)
 
 	simb_linha = simb_col = sym_saida = 0;
 
-	if ((arq_sym = open (n, O_TRUNC | O_CREAT | O_TEXT | O_WRONLY, S_IWRITE)) == -1)
+	if ((arq_sym = open (n, O_TRUNC | O_CREAT | O_TEXT | O_WRONLY, S_IWRITE | S_IREAD)) == -1)
 		longjmp (erro_tratamento2, 7);
 
 	if (nset_simb)					/* so faz alguma coisa se existe simbolo */
@@ -243,7 +243,7 @@ void manda_car_sym (char c)
 
 void cria_rel (char *n)
 	{
-	if ((arq_rel = open (n, O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE)) == -1)
+	if ((arq_rel = open (n, O_TRUNC | O_CREAT | O_BINARY | O_WRONLY, S_IWRITE | S_IREAD)) == -1)
 		longjmp (erro_tratamento2, 8);
 
 	csaida = 0;

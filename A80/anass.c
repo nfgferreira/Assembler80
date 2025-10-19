@@ -2142,8 +2142,8 @@ void inicializa1 (char *nome)
 	for (i = 0; i < sizeof nome_arq; i++)
 		{
 		nome_arq [i] = nome [i];
-		if (nome_arq [i] >= 'a' && nome_arq [i] <= 'z')
-			nome_arq [i] += ('A' - 'a');
+//		if (nome_arq [i] >= 'a' && nome_arq [i] <= 'z')
+//			nome_arq [i] += ('A' - 'a');
 		}
 	nome_arq [sizeof (nome_arq) - 1] = '\0';
 	inic_lex (nome);			/* inicializa analisador lexico */

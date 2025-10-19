@@ -406,7 +406,11 @@ char *tira_path (char *org)
 	size_t i;
 
 	i = strlen (org);
+#ifdef LINUX
+	while (i && (org [i - 1] != '/'))
+#else
 	while (i && (org [i - 1] != '\\') && (org [i - 1] != ':'))
+#endif
 		i--;
 	return org + i;
 	}
