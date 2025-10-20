@@ -4,15 +4,15 @@ CTE     EQU        34
 
         cseg
         org 0
-        JMP        code
+        JMP        code                                                                        ;0x0000
 
         org 44
-        jmp        rst55
+        jmp        rst55                                                                       ;0x002c
 
 ; Let us try to go the numerical order as much as possible here
-var0:   dw       1         
+var0:   dw       1                                                                             ;0x002f 
 var1:   db       2
-code:   NOP               ;0x00
+code:   NOP               ;0x00                                                                ;0x0032
         LXI      B,1234   ;0x01 0x22 0x0c
 rst55:  STAX     B        ;0x02
         INX      B        ;0x03
@@ -24,7 +24,7 @@ rst55:  STAX     B        ;0x02
         DAD      B        ;0x09
         LDAX     B        ;0x0a
         DCX      B        ;0x0b
-        INR      C        ;0x0c
+        INR      C        ;0x0c                                                                ;0x0040
         DCR      C        ;0x0d
         MVI      C,254    ;0x0e 0xfe
         RRC               ;0x0f
@@ -39,20 +39,20 @@ rst55:  STAX     B        ;0x02
         RAL               ;0x17
 ;       RDEL              ;0x18 - not documented and not implemented by a80
         DAD      D        ;0x19
-        LDAX     D        ;0x1a
+        LDAX     D        ;0x1a                                                                ;0x0050
         DCX      D        ;0x1b
         INR      E        ;0x1c
         DCR      E        ;0x1d
         MVI      E,034H   ;0x1e 0x34
         RAR               ;0x1f
         
-LBL2:   RIM               ;0x20
+LBL2:   RIM               ;0x20                                                                ;0x0057
         LXI      H,VAR0   ;0x21 <address>
-        SHLD     VAR1     ;0x22
+        SHLD     VAR1     ;0x22 <address>
         INX      H        ;0x23
         INR      H        ;0x24
-	DCR      H        ;0x25
-	MVI      H,CTE    ;0x26
+	DCR      H        ;0x25                                                                ;0x0060
+	MVI      H,CTE    ;0x26 <byte>
         DAA               ;0x27
 ;       LDHI d8           ;0x28 - not documented and not implemented by a80
         DAD      H        ;0x29
@@ -64,7 +64,7 @@ LBL2:   RIM               ;0x20
         CMA               ;0x2f
 
         SIM               ;0x30
-        LXI      SP,STACK ;0x31 <address>
+        LXI      SP,STACK ;0x31 <address>                                                      ;0x006f
         STA      VAR1     ;0x32 <address>
         INX      SP       ;0x33
         INR      M        ;0x34
@@ -75,7 +75,7 @@ LBL2:   RIM               ;0x20
         DAD      SP       ;0x39
         LDA      VAR1     ;0x3a
         DCX      SP       ;0x3b 
-        INR      A        ;0x3c
+        INR      A        ;0x3c                                                                ;0x0080
 	DCR      A        ;0x3d
 	MVI      A,0d9h   ;0x3e
         CMC               ;0x3f
@@ -91,7 +91,7 @@ LBL2:   RIM               ;0x20
         MOV      C,B      ;0x48
         MOV      C,C      ;0x49
         MOV      C,D      ;0x4a
-        MOV      C,E      ;0x4b
+        MOV      C,E      ;0x4b                                                                ;0x0090
         MOV      C,H      ;0x4c
         MOV      C,L      ;0x4d
         MOV      C,M      ;0x4e
@@ -108,7 +108,7 @@ LBL2:   RIM               ;0x20
         MOV      E,B      ;0x58
         MOV      E,C      ;0x59
         MOV      E,D      ;0x5a
-        MOV      E,E      ;0x5b
+        MOV      E,E      ;0x5b                                                                ;0x00a0
         MOV      E,H      ;0x5c
         MOV      E,L      ;0x5d
         MOV      E,M      ;0x5e
@@ -125,7 +125,7 @@ LBL2:   RIM               ;0x20
         MOV      L,B      ;0x68
         MOV      L,C      ;0x69
         MOV      L,D      ;0x6a
-        MOV      L,E      ;0x6b
+        MOV      L,E      ;0x6b                                                                ;0x00b0
         MOV      L,H      ;0x6c
         MOV      L,L      ;0x6d
         MOV      L,M      ;0x6e
@@ -142,7 +142,7 @@ LBL2:   RIM               ;0x20
         MOV      A,B      ;0x78
         MOV      A,C      ;0x79
         MOV      A,D      ;0x7a
-        MOV      A,E      ;0x7b
+        MOV      A,E      ;0x7b                                                                ;0x00c0
         MOV      A,H      ;0x7c
         MOV      A,L      ;0x7d
         MOV      A,M      ;0x7e
@@ -159,7 +159,7 @@ LBL2:   RIM               ;0x20
         ADC      B        ;0x88
         ADC      C        ;0x89
         ADC      D        ;0x8a
-        ADC      E        ;0x8b
+        ADC      E        ;0x8b                                                                ;0x00d0
         ADC      H        ;0x8c
         ADC      L        ;0x8d
         ADC      M        ;0x8e
@@ -176,7 +176,7 @@ LBL2:   RIM               ;0x20
         SBB      B        ;0x98
         SBB      C        ;0x99
         SBB      D        ;0x9a
-        SBB      E        ;0x9b
+        SBB      E        ;0x9b                                                                ;0x00e0
         SBB      H        ;0x9c
         SBB      L        ;0x9d
         SBB      M        ;0x9e
@@ -193,7 +193,7 @@ LBL2:   RIM               ;0x20
         XRA      B        ;0xa8
         XRA      C        ;0xa9
         XRA      D        ;0xaa
-        XRA      E        ;0xab
+        XRA      E        ;0xab                                                                ;0x00f0
         XRA      H        ;0xac
         XRA      L        ;0xad
         XRA      M        ;0xae
@@ -201,7 +201,7 @@ LBL2:   RIM               ;0x20
 
 
 FUN1:
-FUN2:   ORA      B        ;0xb0
+FUN2:   ORA      B        ;0xb0                                                                ;0x00f5
         ORA      C        ;0xb1
         ORA      D        ;0xb2
         ORA      E        ;0xb3
@@ -212,28 +212,28 @@ FUN3:   ORA      H        ;0xb4
         CMP      B        ;0xb8
         CMP      C        ;0xb9
         CMP      D        ;0xba
-        CMP      E        ;0xbb
+        CMP      E        ;0xbb                                                                ;0x0100
         CMP      H        ;0xbc
         CMP      L        ;0xbd
         CMP      M        ;0xbe
         CMP      A        ;0xbf
 
 LBL5:
-LBL6:   RNZ               ;0xc0
+LBL6:   RNZ               ;0xc0                                                                ;0x0105
         POP      B        ;0xc1
         JNZ      LBL5     ;0xc2 <address>
         JMP      LBL6     ;0xc3 <address>
         CNZ      FUN1     ;0xc4 <address>
-        PUSH     B        ;0xc5
+        PUSH     B        ;0xc5                                                                ;0x0110
         ADI      78       ;0xc6 <byte>
 LBL7:   RST      0        ;0xc7
         RZ                ;0xc8
         RET               ;0xc9
-        JZ       LBL7     ;0xca
+        JZ       LBL7     ;0xca <address>
 ;       *RSTV             ;0xcb - not implemented
         CZ       FUN2     ;0xcc <address>
         CALL     FUN3     ;0xcd <address>
-        ACI      89       ;0xce <byte>
+        ACI      89       ;0xce <byte>                                                        ;0x011f
         RST      1        ;0xcf
 
         RNC               ;0xd0
@@ -244,7 +244,7 @@ LBL7:   RST      0        ;0xc7
         PUSH     D        ;0xd5
         SUI      56h      ;0xd6 <byte>
         RST      2        ;0xd7
-        RC                ;0xd8
+        RC                ;0xd8                                                                ;0x0130
 ;       *SHLX             ;0xd9 - not implemented
         JC       LBL7     ;0xda <address
         IN       90       ;0xdb <byte>
@@ -256,7 +256,7 @@ LBL7:   RST      0        ;0xc7
         RPO               ;0xe0
         POP      H        ;0xe1
         JPO      6789h    ;0xe2 <address>
-        XTHL              ;0xe3
+        XTHL              ;0xe3                                                                ;0x0141
         CPO      9abch    ;0xe4 <address>
         PUSH     H        ;0xe5
         ANI      90       ;0xe6 <byte>
@@ -265,7 +265,7 @@ LBL7:   RST      0        ;0xc7
         PCHL              ;0xe9
         JPE      0abcdh   ;0xea
         XCHG              ;0xeb
-        CPE      1234     ;0xec
+        CPE      1234     ;0xec 0xd2 0x04                                                       ;0x014f
 ;       *LHLX             ;0xed - not implemented
         XRI      34       ;0xee <byte>
         RST      5        ;0xef
@@ -275,20 +275,21 @@ LBL7:   RST      0        ;0xc7
         JP       4321     ;0xf2 <address>
         DI                ;0xf3
         CP       5679     ;0xf4 <address>
-        PUSH     PSW      ;0xf5 <address>
+        PUSH     PSW      ;0xf5
         ORI      10       ;0xf6 <byte>
-        RST      6        ;0xf7
+        RST      6        ;0xf7                                                                ;0x0161
         RM                ;0xf8
         SPHL              ;0xf9
-        JM       9089     ;0xfa
+        JM       9089     ;0xfa <address>
         EI                ;0xfb
         CM       8085     ;0xfc <address>
 ;       *JK a16           ;0xfd <address> - not implemented
         CPI      90       ;0xfe <byte>
-        RST      7        ;0xff
+        RST      7        ;0xff                                                                ;0x016d
 
         DSEG
         ORG    2000H
 VAR9:   DS     2
         DS     1024
 STACK   EQU    $
+        

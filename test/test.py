@@ -70,6 +70,17 @@ def test_all_8085_instructions():
                 0x0a, 0xf7, 0xf8, 0xf9, 0xfa, 0x81, 0x23, 0xfb, 0xfc, 0x95, 0x1f, 0xfe, 0x5a, 0xff
     ]
 
+    with open('all8085.hex', 'rb') as file:
+        binary_data = file.read()   
+
+    if len(expected) != len(binary_data):
+        print("   Linked file has unexpected size.")
+        return False
+
+    for offset,b in enumerate(binary_data):
+        if b != binary_data[offset]:
+            print("   Assembled byte 0x{:02X} at offset {} has not the expected value, which is 0x{:02X}.".format(b, offset, expected[offset]))
+            return False
     
     return True
         
@@ -114,7 +125,7 @@ def main(parameters: list[str]) -> None:
     source_directory = parameters[3]
 
     count : int = run_tests()
-    print("\n>>> Tests finished with {0} error(s)".format(count))
+    print("\n>>>>> Tests finished with {0} error(s) <<<<<".format(count))
 
 if __name__ == "__main__":
     main(sys.argv)
