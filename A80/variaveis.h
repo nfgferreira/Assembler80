@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #define LINUX
 #define bottom_up						/* expressao bottom-up ou top-down */
 #define FAST_READ						/* arquivos de leitura tratados como binario, para tornar leitura + rapida */
@@ -77,7 +79,7 @@ typedef struct simbl
 typedef struct
 	{
 	simb *s;
-	unsigned int valor;
+	uint16_t valor;
 	char atr;						/* atributo */
 	} number;
 
