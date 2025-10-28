@@ -103,12 +103,78 @@ def test_no_sim_rim_in_8080():
 
     return True
 
+def test_ifs():
+    print("\n*** Testing conditional compliation and expressions.")
+
+    a80_path = a80_directory + "/a80"
+    source_path = source_directory + "/if.asm"
+    
+    rel_file = os.path.basename(source_path)
+    rel_file,_ = os.path.splitext(rel_file)
+    rel_file_with_extension = rel_file + ".rel"
+    if (os.path.exists(rel_file_with_extension)):
+        os.remove(rel_file_with_extension)
+    
+    sym_file_with_extension = rel_file + ".sym"
+    if (os.path.exists(sym_file_with_extension)):
+        os.remove(sym_file_with_extension)
+        
+    hex_file_with_extension = rel_file + ".hex"
+    if (os.path.exists(hex_file_with_extension)):
+        os.remove(hex_file_with_extension)
+        
+    print ("   Calling {0} {1}\n".format(a80_path, source_path))
+    out=sp.run([a80_path, source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
+
+    decoded_lines = out.stdout.decode('utf-8').splitlines()
+    for line in decoded_lines:
+        print("   " + line)
+
+    if (out.returncode != 0):
+        print("   Returned {0}, 0 expected.".format(out.returncode))
+        return False
+
+    l80_path = l80_directory + "/l80"
+    print ("   Calling {0} -S if.hex {1}\n".format(l80_path, rel_file))
+    out=sp.run([l80_path, "-S", "if.hex", rel_file], stdout=sp.PIPE, stderr=sp.STDOUT)
+
+    decoded_lines = out.stdout.decode('utf-8').splitlines()
+    for line in decoded_lines:
+        print("   " + line)
+
+    if (out.returncode != 0):
+        print("   Returned {0}, 0 expected.".format(out.returncode))
+        return False
+    
+    with open('if.hex', 'rb') as file:
+        binary_data = file.read()   
+
+    if 66 != len(binary_data):
+        print("   Linked file has unexpected size.")
+        return False
+
+    for offset,b in enumerate(binary_data):
+        if b != offset:
+            print("   Assembled byte 0x{:02X} at offset {} has not the expected value, which is 0x{:02X}.".format(b, offset, offset))
+            return False
+
+    with open('if.sym', 'rb') as file:
+        binary_data = file.read()   
+
+    if 0 != len(binary_data):
+        print("   Symbol file has unexpected size.")
+        return False
+    
+    return True
+
 def run_tests() -> int:
     count: int = 0    # Number of errors
 
     if not test_no_sim_rim_in_8080():
         count = count + 1
     if not test_all_8085_instructions():
+        count = count + 1
+    if not test_ifs():
         count = count + 1
     return count
 
