@@ -13,7 +13,7 @@ CTE     EQU        34
 var0:   dw       1                                                                             ;0x002f 
 var1:   db       2
 code:   NOP               ;0x00                                                                ;0x0032
-        LXI      B,1234   ;0x01 0x22 0x0c
+        LXI      B,1234   ;0x01 0xd2 0x04
 rst55:  STAX     B        ;0x02
         INX      B        ;0x03
         INR      B        ;0x04
