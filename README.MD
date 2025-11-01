@@ -139,6 +139,19 @@ Z180 but not by 8080/8085 are implemented using the following mneumonics:
 (*) Z180 exclusive instruction. All the others are Z80's too.
 (**) CPO, CPE, JPO, JPE, RPO, RPE can be used instead of those.
 
+# Building
+
+1. Clone this repository
+2. cd to the program you want to build (A80, L80 or LB80)
+3. mkdir build
+4. cd build
+5. cmake -DCMAKE_BUILD_TYPE=Release .. (*)
+6. make
+
+(*) You can use -DCMAKE_BUILD_TYPE=Release to create a version to debug the software.
 
 Tests
 =====
+
+Tests are executed by running a Python script. The easiest way to run them is going to directory test and executing the bash script test.sh.
+
