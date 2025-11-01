@@ -162,7 +162,7 @@ static char *erro_tab[] =
 	"Inconsistent PCH file."
 	};
 
-static char *nmacro = " macro";
+static char nmacro[] = " macro";
 
 int compila (char *nome)
 	{

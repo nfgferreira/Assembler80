@@ -1,0 +1,7 @@
+MY_MACRO        MACRO     P1,P2
+                LOCAL     MY_LABEL
+                DW        P1
+                DW        P2
+                JMP       MY_LABEL
+MY_LABEL:       ENDM
+

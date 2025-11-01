@@ -3,7 +3,6 @@ import sys
 import os
 
 a80_directory: str = ""
-source_directory: str = ""
 
 def assembly(include_path: str = "",
              output_file: str = "",
@@ -17,7 +16,7 @@ def test_all_8085_instructions():
     print("\n*** Testing all 8085 instuctions.")
 
     a80_path = a80_directory + "/a80"
-    source_path = source_directory + "/all8085.asm"
+    source_path = "all8085.asm"
 
     rel_file = os.path.basename(source_path)
     rel_file,_ = os.path.splitext(rel_file)
@@ -88,7 +87,7 @@ def test_no_sim_rim_in_8080():
     print("\n*** Testing we do not have RIM and SIM in 8080.")
 
     a80_path = a80_directory + "/a80"
-    source_path = source_directory + "/all8085.asm"
+    source_path = "all8085.asm"
     
     print ("   Calling {0} -8080 {1}\n".format(a80_path, source_path))
     out=sp.run([a80_path, "-8080", source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
@@ -103,11 +102,51 @@ def test_no_sim_rim_in_8080():
 
     return True
 
-def test_ifs():
-    print("\n*** Testing conditional compliation and expressions.")
+def test_macros():
+    print("\n*** Testing macros and file include.")
 
     a80_path = a80_directory + "/a80"
-    source_path = source_directory + "/if.asm"
+    source_path = "macros.asm"
+    
+    rel_file = os.path.basename(source_path)
+    rel_file,_ = os.path.splitext(rel_file)
+    rel_file_with_extension = rel_file + ".rel"
+    if (os.path.exists(rel_file_with_extension)):
+        os.remove(rel_file_with_extension)
+    
+    hex_file_with_extension = rel_file + ".hex"
+    if (os.path.exists(hex_file_with_extension)):
+        os.remove(hex_file_with_extension)
+
+    print ("   Calling {0} {1}\n".format(a80_path, source_path))
+    out=sp.run([a80_path, source_path], stdout=sp.PIPE, stderr=sp.STDOUT)
+
+    decoded_lines = out.stdout.decode('utf-8').splitlines()
+    for line in decoded_lines:
+        print("   " + line)
+
+    if (out.returncode != 0):
+        print("   Returned {0}, 0 expected.".format(out.returncode))
+        return False
+
+    l80_path = l80_directory + "/l80"
+    print ("   Calling {0} -S if.hex {1}\n".format(l80_path, rel_file))
+    out=sp.run([l80_path, "-S", "if.hex", rel_file], stdout=sp.PIPE, stderr=sp.STDOUT)
+
+    decoded_lines = out.stdout.decode('utf-8').splitlines()
+    for line in decoded_lines:
+        print("   " + line)
+
+    if (out.returncode != 0):
+        print("   Returned {0}, 0 expected.".format(out.returncode))
+        return False
+    
+
+def test_ifs():
+    print("\n*** Testing conditional compilation and expressions.")
+
+    a80_path = a80_directory + "/a80"
+    source_path = "if.asm"
     
     rel_file = os.path.basename(source_path)
     rel_file,_ = os.path.splitext(rel_file)
@@ -176,19 +215,24 @@ def run_tests() -> int:
         count = count + 1
     if not test_ifs():
         count = count + 1
+    if not test_macros():
+        count = count + 1
     return count
 
 def main(parameters: list[str]) -> None:
     if len(parameters) < 4:
-        print("1st parameter: directory where the a80 executable is.")
-        print("2nd parameter: directory where the l80 executable is.")
+        print("1st parameter: directory where the a80 executable is relative to 3rd parameter.")
+        print("2nd parameter: directory where the l80 executable is relative to 3rd parameter.")
         print("3rd parameter: path for directory with source files to be tested.")
         exit(1)
 
-    global a80_directory, l80_directory, source_directory
+    global a80_directory, l80_directory
     a80_directory = parameters[1]
     l80_directory = parameters[2]
     source_directory = parameters[3]
+
+    os.chdir(source_directory)
+    print(f"Successfully changed directory to: {os.getcwd()}")
 
     count : int = run_tests()
     print("\n>>>>> Tests finished with {0} error(s) <<<<<".format(count))
