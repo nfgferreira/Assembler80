@@ -641,7 +641,7 @@ t_atomo analex1 (void)
 	{
 	char c, tipo_string;
 
-	while ((c = le_car ()) == '\t' || c == ' ');
+	while ((c = le_car ()) == '\t' || c == ' ' || c == '\r');
 	switch (c)
 		{
 	case '(':
