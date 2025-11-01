@@ -141,14 +141,16 @@ Z180 but not by 8080/8085 are implemented using the following mneumonics:
 
 # Building
 
-1. Clone this repository
-2. cd to the program you want to build (A80, L80 or LB80)
-3. mkdir build
-4. cd build
-5. ```cmake -DCMAKE_BUILD_TYPE=Release .. (*)
-6. make
+Clone this repository and move to the directory of the program you want to build (A80, LB80 or L80).
 
-(*) You can use -DCMAKE_BUILD_TYPE=Release to create a version to debug the software.
+Then execute the commands bellow.
+
+```
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release .. (*)
+make
+```
 
 Tests
 =====
