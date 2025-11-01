@@ -19,7 +19,7 @@ and more powerful than the first PCs we had few years prior. But that did not
 improve the assembly time much, since it was executed by the old BabyBlues. On the
 contrary, as the software grew in size, the assembly time took longer and longer
 and frustration mounted. I do not remember the exact time it took to assembly
-everything, but it should be something between 20 and 30 minutes.
+everything, but it should be something between 20 and 30 minutes or perhaps even more.
 
 By around this time I went back to college in order to study towards my master's
 degree. One of the courses was about compilers and I enjoyed the subject very
@@ -157,5 +157,7 @@ If you want to debug the software, call cmake with the option -DCMAKE_BUILD_TYPE
 Tests
 =====
 
-Tests are executed by running a Python script. The easiest way to run them is going to directory test and executing the bash script test.sh.
+A small amount of tests is executed by running a Python script. The easiest way to run them
+is going to directory test and executing the bash script test.sh.
 
+LB80 is not tested. The Z80/Z180 mneumonics are also not tested.
