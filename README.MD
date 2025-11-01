@@ -145,7 +145,7 @@ Z180 but not by 8080/8085 are implemented using the following mneumonics:
 2. cd to the program you want to build (A80, L80 or LB80)
 3. mkdir build
 4. cd build
-5. cmake -DCMAKE_BUILD_TYPE=Release .. (*)
+5. ```cmake -DCMAKE_BUILD_TYPE=Release .. (*)
 6. make
 
 (*) You can use -DCMAKE_BUILD_TYPE=Release to create a version to debug the software.
