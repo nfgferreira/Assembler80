@@ -148,9 +148,11 @@ Then execute the commands bellow.
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release .. (*)
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ```
+
+If you want to debug the software, call cmake with the option -DCMAKE_BUILD_TYPE=Debug instead.
 
 Tests
 =====
