@@ -1,3 +1,3 @@
 #!/bin/bash
-python test.py ../../A80/release ../../L80/release source
+python test.py ../../A80/build ../../L80/build source
 
